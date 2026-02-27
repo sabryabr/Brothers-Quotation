@@ -60,6 +60,10 @@
             <div><label>Pickup Date/Time</label><input type="datetime-local" id="q_start" onchange="calcTotal()"></div>
             <div><label>Dropoff Date/Time</label><input type="datetime-local" id="q_end" onchange="calcTotal()"></div>
         </div>
+        <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 12px;">
+            <div><label>Pickup Location</label><input type="text" id="q_p_loc" placeholder="Office / Airport / Hotel"></div>
+            <div><label>Dropoff Location</label><input type="text" id="q_d_loc" placeholder="Office / Airport / Hotel"></div>
+        </div>
 
         <div class="section-head"><i class="fa-solid fa-car"></i> 2. Vehicle Selection</div>
         <div class="grid-3">
@@ -84,12 +88,12 @@
             <div><label>Extra KM Package</label>
                 <select id="q_km_type" onchange="calcTotal()">
                     <option value="Standard" data-km="0">Standard (120 KM/Day)</option>
-                    <option value="500 KM Package" data-km="500">500 KM (1800 EGP)</option>
-                    <option value="750 KM Package" data-km="750">750 KM (2700 EGP)</option>
-                    <option value="1000 KM Package" data-km="1000">1000 KM (3600 EGP)</option>
-                    <option value="1500 KM Package" data-km="1500">1500 KM (5400 EGP)</option>
-                    <option value="2000 KM Package" data-km="2000">2000 KM (7200 EGP)</option>
-                    <option value="3000 KM Package" data-km="3000">3000 KM (10800 EGP)</option>
+                    <option value="500 KM Extra" data-km="500">500 KM</option>
+                    <option value="750 KM Extra" data-km="750">750 KM</option>
+                    <option value="1000 KM Extra" data-km="1000">1000 KM</option>
+                    <option value="1500 KM Extra" data-km="1500">1500 KM</option>
+                    <option value="2000 KM Extra" data-km="2000">2000 KM</option>
+                    <option value="3000 KM Extra" data-km="3000">3000 KM</option>
                     <option value="Unlimited" data-km="999999">Unlimited KM</option>
                 </select>
             </div>
@@ -129,6 +133,7 @@
                 <table class="pt" style="margin:0;">
                     <tr><th>Client Name</th><td id="out_name" colspan="3"></td></tr>
                     <tr><th>Pickup</th><td id="out_start"></td><th>Dropoff</th><td id="out_end"></td></tr>
+                    <tr><th>Pickup Loc</th><td id="out_p_loc"></td><th>Dropoff Loc</th><td id="out_d_loc"></td></tr>
                     <tr><th>Duration</th><td id="out_dur"></td><th>KM Allowance</th><td id="out_km_desc"></td></tr>
                 </table>
             </div>
@@ -154,14 +159,14 @@
 
             <div style="font-weight:bold; margin-bottom:5px; border-bottom:1px solid #ddd; font-size:9pt; color:var(--primary);">RENTAL TERMS & CONDITIONS</div>
             <div class="terms-grid">
-                <div><strong>1. ELIGIBILITY:</strong> Min age 21. Valid License (1+ year). Valid ID/Passport mandatory. Authorized drivers only.</div>
-                <div><strong>2. RENTAL CYCLE:</strong> Based on 24-hour units. 5-hour grace period before per-hour charges apply.</div>
-                <div><strong>3. MILEAGE:</strong> 120 KM/day included. Summed with purchased package. Excess KM charged per return rates.</div>
-                <div><strong>4. FUEL:</strong> "Same to Same" policy. Return at same level as pickup to avoid shortage fees.</div>
-                <div><strong>5. INSURANCE VOID:</strong> Plan is null if no Police Report provided, driving under influence, or off-road.</div>
-                <div><strong>6. PENALTIES:</strong> Key loss ($400), License loss ($250). Dirty return (350 EGP).</div>
-                <div><strong>7. DEPOSIT:</strong> Refunded upon safe return in same currency mix. Card refunds in EGP Cash.</div>
-                <div><strong>8. LIABILITY:</strong> Lessee bears full legal and criminal liability during the rental period.</div>
+                <div><strong>1. ELIGIBILITY:</strong> Min age 21. Valid License (1+ year). Valid ID/Passport mandatory. Authorized drivers only. [cite: 42, 43, 44, 45]</div>
+                <div><strong>2. RENTAL CYCLE:</strong> Based on 24-hour units. 5-hour grace period before per-hour charges apply. [cite: 47, 48, 49]</div>
+                <div><strong>3. MILEAGE:</strong> 120 KM/day included. Summed with purchased package. Excess KM charged per return rates. [cite: 22, 57]</div>
+                <div><strong>4. FUEL:</strong> "Same to Same" policy. Return at same level as pickup to avoid shortage fees. [cite: 114, 118]</div>
+                <div><strong>5. INSURANCE VOID:</strong> Plan is null if no Police Report provided, driving under influence, or off-road. [cite: 66, 67, 68, 69]</div>
+                <div><strong>6. PENALTIES:</strong> Key loss ($400), License loss ($250). Dirty return (350 EGP). [cite: 74, 75, 80]</div>
+                <div><strong>7. DEPOSIT:</strong> Refunded upon safe return in same currency mix. Card refunds in EGP Cash. [cite: 83, 84, 85]</div>
+                <div><strong>8. LIABILITY:</strong> Lessee bears full legal and criminal liability during the rental period. [cite: 34, 35]</div>
             </div>
 
             <div style="text-align:center; margin-top:30px; font-weight:bold; color:var(--primary); border-top:2px solid var(--primary); padding-top:10px;">
@@ -204,8 +209,8 @@
             const refNum = "PR-" + Math.floor(Math.random()*90000);
             const todayDate = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
             
-            // Fix PDF filename format
-            document.getElementById('page-title').innerText = `${refNum}_${todayDate}_${clientName}`;
+            // Fix PDF filename format for browser title
+            document.getElementById('page-title').innerText = `${refNum}_${clientName}_${todayDate}`;
 
             const car = document.getElementById('q_car').options[document.getElementById('q_car').selectedIndex].text;
             const rate = parseFloat(document.getElementById('q_rate').value);
@@ -231,6 +236,8 @@
             document.getElementById('out_name').innerText = clientName;
             document.getElementById('out_start').innerText = document.getElementById('q_start').value.replace('T',' ');
             document.getElementById('out_end').innerText = document.getElementById('q_end').value.replace('T',' ');
+            document.getElementById('out_p_loc').innerText = document.getElementById('q_p_loc').value || 'Office';
+            document.getElementById('out_d_loc').innerText = document.getElementById('q_d_loc').value || 'Office';
             document.getElementById('out_dur').innerText = days + " Days";
             document.getElementById('out_car').innerText = car;
             document.getElementById('out_km_desc').innerText = totalKM;
@@ -248,7 +255,7 @@
 
             document.getElementById('out_ins_title').innerText = insPack.toUpperCase();
             const insTexts = {
-                "Basic": "Basic CDW (100% Liability): High Deductible. Client pays 100% for Glass, Tires, and Undercarriage damages.",
+                "Basic": "Basic CDW (100% Liability): High Deductible. Client pays 100% for Glass, Tires, and Undercarriage damages. [cite: 31, 60, 61, 62]",
                 "Intermediate": "Reduced Liability. 70/30 split between Client and Company for body damages.",
                 "Full": "Zero Deductible Waiver. Reduces liability to ZERO for covered body, glass, and undercarriage items."
             };
