@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brothers EGY - Professional Price Proposal v2.0</title>
+    <title>Brothers EGY - Professional Proposal v3.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary: #04509D; --secondary: #2c3e50; --accent: #e67e22; --bg: #f0f3f6; }
@@ -33,7 +33,7 @@
         .pt { width: 100%; border-collapse: collapse; font-size: 9pt; margin-bottom: 5px; }
         .pt th, .pt td { border: 1px solid #000; padding: 4px; text-align: left; vertical-align: middle; }
         .pt th { background: #f0f0f0; font-weight: bold; text-align: center; }
-        .terms-grid { font-size: 7.5pt; column-count: 2; column-gap: 25px; text-align: justify; color: #555; border-top: 1px solid #eee; padding-top: 10px; line-height: 1.3; }
+        .terms-grid { font-size: 7.2pt; column-count: 2; column-gap: 25px; text-align: justify; color: #555; border-top: 1px solid #eee; padding-top: 10px; line-height: 1.3; }
 
         @media print {
             body { background: white; padding: 0; }
@@ -48,13 +48,13 @@
     <div class="floating-header">
         <div style="display:flex; align-items:center; gap:15px;">
             <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:40px;">
-            <h2 style="margin:0; color:var(--primary); font-size:18px;">Quotation Proposal</h2>
+            <h2 style="margin:0; color:var(--primary); font-size:18px;">Price Proposal System</h2>
         </div>
         <div id="clock" class="live-clock">--:--:--</div>
     </div>
 
     <div class="setup-container">
-        <div class="section-head"><i class="fa-solid fa-user"></i> 1. Client & Period</div>
+        <div class="section-head"><i class="fa-solid fa-user"></i> 1. Client & Dates</div>
         <div class="grid-3">
             <div><label>Client Full Name</label><input type="text" id="q_name" placeholder="John Doe"></div>
             <div><label>Pickup Date/Time</label><input type="datetime-local" id="q_start" onchange="calcTotal()"></div>
@@ -65,19 +65,32 @@
         <div class="grid-3">
             <div><label>Select From Fleet</label>
                 <select id="q_car" onchange="updateRate()">
-                    </select>
+                    <option value="33" data-rate="1600">Haval Jolion</option>
+                    <option value="47" data-rate="2200">Hyundai Tucson</option>
+                    <option value="48" data-rate="2800">Jetour X90 Plus</option>
+                    <option value="34" data-rate="1500">MG ZS</option>
+                    <option value="42" data-rate="1200">MG 5</option>
+                    <option value="40" data-rate="1150">Nissan Sunny</option>
+                    <option value="43" data-rate="1700">Renault Duster</option>
+                    <option value="38" data-rate="1100">Chevrolet Aveo</option>
+                </select>
             </div>
             <div><label>Daily Rent (EGP)</label><input type="number" id="q_rate" value="1500" oninput="calcTotal()"></div>
             <div><label>Duration</label><input type="text" id="q_days_val" readonly style="background:#eee;"></div>
         </div>
 
-        <div class="section-head"><i class="fa-solid fa-road"></i> 3. KM & Insurance Packages</div>
+        <div class="section-head"><i class="fa-solid fa-road"></i> 3. Mileage & Insurance</div>
         <div class="grid-4">
-            <div><label>KM Package</label>
-                <select id="q_km_type" onchange="calcTotal()">
-                    <option value="Standard">Standard (120 KM/Day)</option>
-                    <option value="Extra">Extra KM Package</option>
-                    <option value="Unlimited">Unlimited KM</option>
+            <div><label>Extra KM Package</label>
+                <select id="q_km_type" onchange="updateKM()">
+                    <option value="0" data-km="0">Standard (120 KM/Day)</option>
+                    <option value="1800" data-km="500">500 KM (+1800 EGP)</option>
+                    <option value="2700" data-km="750">750 KM (+2700 EGP)</option>
+                    <option value="3600" data-km="1000">1000 KM (+3600 EGP)</option>
+                    <option value="5400" data-km="1500">1500 KM (+5400 EGP)</option>
+                    <option value="7200" data-km="2000">2000 KM (+7200 EGP)</option>
+                    <option value="10800" data-km="3000">3000 KM (+10800 EGP)</option>
+                    <option value="500" data-km="999999">Unlimited (+500/Day)</option>
                 </select>
             </div>
             <div><label>KM Package Cost (Total)</label><input type="number" id="q_km_cost" value="0" oninput="calcTotal()"></div>
@@ -91,11 +104,11 @@
             <div><label>Insurance Cost / Day</label><input type="number" id="q_ins_rate" value="0" oninput="calcTotal()"></div>
         </div>
 
-        <div class="section-head"><i class="fa-solid fa-plus-circle"></i> 4. Extras & Delivery</div>
+        <div class="section-head"><i class="fa-solid fa-plus-circle"></i> 4. Extras</div>
         <div class="grid-4">
             <div><label>Delivery/Dropoff Fee</label><input type="number" id="q_del" value="0" oninput="calcTotal()"></div>
             <div><label>Child Seat (Qty)</label><input type="number" id="q_seat" value="0" oninput="calcTotal()"></div>
-            <div><label>Additional Driver (Qty)</label><input type="number" id="q_driver" value="0" oninput="calcTotal()"></div>
+            <div><label>Add. Driver (Qty)</label><input type="number" id="q_driver" value="0" oninput="calcTotal()"></div>
             <div><label>Security Deposit</label><input type="number" id="q_dep" value="5000"></div>
         </div>
 
@@ -121,16 +134,12 @@
             </div>
 
             <div class="box-section"><span class="bs-title">VEHICLE DETAILS</span>
-                <table class="pt">
-                    <tr><th>Model</th><td id="out_car" colspan="3"></td></tr>
-                </table>
+                <table class="pt"><tr><th>Model</th><td id="out_car" colspan="3"></td></tr></table>
             </div>
 
             <div class="box-section"><span class="bs-title">FINANCIAL BREAKDOWN</span>
                 <table class="pt">
-                    <thead>
-                        <tr><th>Description</th><th>Calculation</th><th style="text-align:right;">Amount (EGP)</th></tr>
-                    </thead>
+                    <thead><tr><th>Description</th><th>Calculation</th><th style="text-align:right;">Amount (EGP)</th></tr></thead>
                     <tbody id="out_table"></tbody>
                     <tfoot>
                         <tr style="font-weight:bold; background:#f0f0f0;"><td colspan="2" align="right">TOTAL PROPOSAL VALUE:</td><td align="right" id="out_total"></td></tr>
@@ -143,19 +152,21 @@
                 <p id="out_ins_body" style="margin:0; font-size:8.5pt; line-height:1.4;"></p>
             </div>
 
-            <div style="font-weight:bold; margin-bottom:5px; border-bottom:1px solid #ddd; font-size:9pt;">TERMS & CONDITIONS Summary</div>
+            <div style="font-weight:bold; margin-bottom:5px; border-bottom:1px solid #ddd; font-size:9pt;">RENTAL TERMS & CONDITIONS</div>
             <div class="terms-grid">
-                <div><strong>1. REQUIREMENTS:</strong> Min age 21[cite: 42]. Valid License for 1+ year[cite: 43]. Passport/ID mandatory[cite: 44].</div>
-                <div><strong>2. RENTAL CYCLE:</strong> Based on 24-hour units[cite: 47]. 1-hour grace period allowed[cite: 48]. Late returns charged as full day[cite: 49].</div>
-                <div><strong>3. MILEAGE:</strong> Standard 120KM/day included[cite: 57]. Total allowance is (120 x Days) + purchased package[cite: 199].</div>
-                <div><strong>4. FUEL:</strong> Return at same level as pickup to avoid shortage fees[cite: 118, 199].</div>
-                <div><strong>5. INSURANCE VOID:</strong> Plan is NULL if no official Police Report is provided, driving under influence, or off-road[cite: 66, 67, 68, 69].</div>
-                <div><strong>6. PENALTIES:</strong> Loss of key ($400), License ($250), Tire damage ($200/tire)[cite: 74, 75, 78].</div>
-                <div><strong>7. DEPOSIT:</strong> Refunded upon safe return in same currency mix[cite: 83, 84]. Card refunds in EGP Cash[cite: 85].</div>
-                <div><strong>8. THEFT:</strong> Vehicle is Lessee's sole liability; theft is NOT covered by insurance[cite: 64].</div>
+                <div><strong>1. REQUIREMENTS:</strong> Min age 21. Valid License (1+ year). Valid ID/Passport mandatory[cite: 279].</div>
+                <div><strong>2. RENTAL CYCLE:</strong> Based on 24-hour units. 5-hour grace period before per-hour charges apply.</div>
+                <div><strong>3. MILEAGE:</strong> 120 KM/day included. Summed with purchased package. Excess KM charged per return rates.</div>
+                <div><strong>4. FUEL:</strong> Return at same level as pickup[cite: 281].</div>
+                <div><strong>5. INSURANCE VOID:</strong> Plan is null if no Police Report is provided, driving under influence, or off-road[cite: 283].</div>
+                <div><strong>6. PENALTIES:</strong> Key loss ($400), License loss ($250). Dirty return (350 EGP)[cite: 282].</div>
+                <div><strong>7. DEPOSIT:</strong> Refunded upon safe return in same currency mix. Card refunds in EGP Cash[cite: 284].</div>
+                <div><strong>8. LIABILITY:</strong> Lessee bears full legal and criminal liability during the rental period.</div>
             </div>
 
-            <div class="footer-words">We look forward to serving you.<br>Best Regards,<br>Brothers EGY Team</div>
+            <div style="text-align:center; margin-top:30px; font-weight:bold; color:var(--primary); border-top:2px solid var(--primary); padding-top:10px;">
+                We look forward to serving you. Best Regards, Brothers EGY Team
+            </div>
         </div>
         <div style="text-align:center; padding:20px;" class="btn-print-action">
             <button class="btn-gen" onclick="window.print()" style="width:250px;">Save Proposal PDF</button>
@@ -163,31 +174,33 @@
     </div>
 
     <script>
-        const fleet = [
-            {code:"33", model:"Haval Jolion", rate:1600},
-            {code:"47", model:"Hyundai Tucson", rate:2200},
-            {code:"48", model:"Jetour X90 Plus", rate:2800},
-            {code:"34", model:"MG ZS Comfort", rate:1500},
-            {code:"42", model:"MG 5", rate:1200},
-            {code:"40", model:"Nissan Sunny", rate:1150},
-            {code:"43", model:"Renault Duster", rate:1700}
-        ];
-
-        window.onload = function() {
-            const sel = document.getElementById('q_car');
-            fleet.forEach(c => {
-                let opt = document.createElement('option');
-                opt.value = c.code; opt.text = c.model;
-                sel.add(opt);
-            });
-            updateRate();
-            setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleString(); }, 1000);
-        };
+        function updateClock() {
+            document.getElementById('clock').innerText = new Date().toLocaleString();
+        }
+        setInterval(updateClock, 1000);
 
         function updateRate() {
-            const code = document.getElementById('q_car').value;
-            const car = fleet.find(x => x.code === code);
-            document.getElementById('q_rate').value = car.rate;
+            const sel = document.getElementById('q_car');
+            const rate = sel.options[sel.selectedIndex].getAttribute('data-rate');
+            document.getElementById('q_rate').value = rate;
+            calcTotal();
+        }
+
+        function updateKM() {
+            const sel = document.getElementById('q_km_type');
+            const cost = sel.value;
+            const km = sel.options[sel.selectedIndex].getAttribute('data-km');
+            
+            // If unlimited, cost is per day, else it's fixed package
+            if(km == 999999) {
+                const s = new Date(document.getElementById('q_start').value);
+                const e = new Date(document.getElementById('q_end').value);
+                let days = 1;
+                if (e > s) days = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
+                document.getElementById('q_km_cost').value = cost * days;
+            } else {
+                document.getElementById('q_km_cost').value = cost;
+            }
             calcTotal();
         }
 
@@ -200,18 +213,20 @@
                 if (e > s) days = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
             }
             document.getElementById('q_days_val').value = days + " Days";
-            const baseKM = days * 120;
-            document.getElementById('q_km_allow').value = baseKM + " KM Base";
-            return { days, baseKM };
+            return days;
         }
 
         function generateProposal() {
-            const { days, baseKM } = calcTotal();
+            const days = calcTotal();
             const car = document.getElementById('q_car').options[document.getElementById('q_car').selectedIndex].text;
             const rate = parseFloat(document.getElementById('q_rate').value);
             const insRate = parseFloat(document.getElementById('q_ins_rate').value);
             const kmCost = parseFloat(document.getElementById('q_km_cost').value);
-            const kmType = document.getElementById('q_km_type').value;
+            
+            const kmSel = document.getElementById('q_km_type');
+            const extraKM = parseInt(kmSel.options[kmSel.selectedIndex].getAttribute('data-km'));
+            const totalKM = extraKM == 999999 ? "Unlimited" : (days * 120 + extraKM).toLocaleString() + " KM Total";
+
             const del = parseFloat(document.getElementById('q_del').value);
             const seat = parseInt(document.getElementById('q_seat').value) || 0;
             const driver = parseInt(document.getElementById('q_driver').value) || 0;
@@ -230,12 +245,12 @@
             document.getElementById('out_end').innerText = document.getElementById('q_end').value.replace('T',' ');
             document.getElementById('out_dur').innerText = days + " Days";
             document.getElementById('out_car').innerText = car;
-            document.getElementById('out_km_desc').innerText = kmType === 'Unlimited' ? "Unlimited" : (baseKM + " KM Total");
+            document.getElementById('out_km_desc').innerText = totalKM;
 
             let html = `<tr><td>Base Rent: ${car}</td><td>${rate.toLocaleString()} x ${days} Days</td><td align="right">${baseRent.toLocaleString()}</td></tr>`;
             if(totalIns > 0) html += `<tr><td>Insurance (${insPack})</td><td>${insRate.toLocaleString()} x ${days} Days</td><td align="right">${totalIns.toLocaleString()}</td></tr>`;
-            if(kmCost > 0) html += `<tr><td>KM Package: ${kmType}</td><td>Fixed</td><td align="right">${kmCost.toLocaleString()}</td></tr>`;
-            if(totalSeat > 0) html += `<tr><td>Child Car Seat (Qty: ${seat})</td><td>250 x ${days} Days</td><td align="right">${totalSeat.toLocaleString()}</td></tr>`;
+            if(kmCost > 0) html += `<tr><td>KM Package: ${kmSel.options[kmSel.selectedIndex].text}</td><td>Package Fee</td><td align="right">${kmCost.toLocaleString()}</td></tr>`;
+            if(totalSeat > 0) html += `<tr><td>Child Seat (Qty: ${seat})</td><td>250 x ${days} Days</td><td align="right">${totalSeat.toLocaleString()}</td></tr>`;
             if(totalDriver > 0) html += `<tr><td>Add. Driver (Qty: ${driver})</td><td>150 x ${days} Days</td><td align="right">${totalDriver.toLocaleString()}</td></tr>`;
             if(del > 0) html += `<tr><td>Delivery/Collection Fee</td><td>Fixed</td><td align="right">${del.toLocaleString()}</td></tr>`;
             
@@ -245,9 +260,9 @@
 
             document.getElementById('out_ins_title').innerText = insPack.toUpperCase();
             const insTexts = {
-                "Basic": "Basic CDW (Body only). You pay 100% for Glass, Tires, and Undercarriage damages. All glass/tires excluded[cite: 62].",
-                "Intermediate": "Reduced Liability. Client pays 70% of costs, Company covers 30%. Excludes Interior and Glass.",
-                "Full": "Zero Deductible Waiver. Reduces liability to ZERO for body/glass/tires subject to plan caps. Excludes misfueling and interior burns[cite: 101]."
+                "Basic": "Basic CDW. Client pays 100% for Glass, Tires, and Undercarriage. Body damage includes excess.",
+                "Intermediate": "Reduced Liability. 70/30 split. Excludes interior negligence and glass.",
+                "Full": "Zero Deductible. Covers Body, Glass, and Undercarriage within plan caps."
             };
             document.getElementById('out_ins_body').innerText = insTexts[insPack];
             
