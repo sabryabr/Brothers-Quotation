@@ -3,241 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brothers EGY - Professional Quotation System</title>
+    <title>Brothers EGY - Professional Quotation Offer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #04509D;
-            --secondary: #2c3e50;
-            --accent: #e67e22;
-            --bg: #f4f7f9;
-        }
-
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        :root { --primary: #04509D; --secondary: #333; --accent: #e67e22; --bg: #f4f7f9; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
+        .setup-container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 15px; }
+        label { display: block; font-size: 10px; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 4px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .btn-gen { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 20px; text-transform: uppercase; }
         
-        /* Control Panel Styles */
-        .setup-container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .header-ui { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 25px; }
+        /* Quotation A4 Style */
+        #quotationOutput { display: none; margin-top: 30px; }
+        .a4-quote { width: 210mm; min-height: 297mm; padding: 15mm; margin: 0 auto; background: white; box-shadow: 0 0 20px rgba(0,0,0,0.1); position: relative; }
+        .quote-header { display: flex; justify-content: space-between; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
+        .client-info-bar { background: #f8f9fa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; font-size: 10pt; }
+        .table-fin { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10pt; }
+        .table-fin th { background: #eee; padding: 10px; text-align: left; border: 1px solid #ddd; }
+        .table-fin td { padding: 10px; border: 1px solid #ddd; }
+        .ins-box { border: 1px solid #000; border-radius: 6px; padding: 15px; margin-bottom: 20px; background: #fff8e1; }
+        .terms-grid { font-size: 8pt; column-count: 2; column-gap: 25px; color: #666; text-align: justify; border-top: 1px solid #eee; padding-top: 15px; }
         
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
-        label { display: block; font-size: 11px; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        
-        .btn-generate { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s; }
-        .btn-generate:hover { background: #033a75; transform: translateY(-2px); }
-
-        /* A4 Quotation Styles */
-        #quotationOutput { display: none; margin-top: 40px; }
-        .a4-quote { 
-            width: 210mm; min-height: 297mm; padding: 20mm; margin: 0 auto; 
-            background: white; box-shadow: 0 0 20px rgba(0,0,0,0.2); position: relative;
-            color: #333; line-height: 1.5; font-size: 10pt;
-        }
-
-        .quote-header { display: flex; justify-content: space-between; margin-bottom: 40px; }
-        .company-meta { text-align: right; font-size: 9pt; color: #666; }
-        
-        .client-bar { background: var(--primary); color: white; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; margin-bottom: 30px; }
-        
-        .table-offer { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        .table-offer th { background: #f8f9fa; text-align: left; padding: 12px; border-bottom: 2px solid var(--primary); }
-        .table-offer td { padding: 12px; border-bottom: 1px solid #eee; }
-        
-        .total-box { margin-left: auto; width: 300px; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 5px solid var(--primary); }
-        .total-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
-        .grand-total { font-size: 14pt; font-weight: bold; color: var(--primary); border-top: 1px solid #ddd; margin-top: 10px; padding-top: 10px; }
-
-        .ins-highlight { background: #fff8e1; border: 1px solid #ffe082; padding: 15px; border-radius: 8px; margin: 20px 0; }
-        
-        .terms-section { font-size: 8.5pt; color: #777; border-top: 1px solid #eee; padding-top: 20px; margin-top: 40px; column-count: 2; column-gap: 30px; }
-
         @media print {
             body { background: white; padding: 0; }
-            .setup-container, .btn-print-action { display: none !important; }
+            .setup-container, .btn-print { display: none !important; }
             #quotationOutput { display: block !important; margin: 0; }
-            .a4-quote { box-shadow: none; width: 100%; padding: 15mm; }
+            .a4-quote { box-shadow: none; width: 100%; }
         }
     </style>
 </head>
 <body>
 
     <div class="setup-container">
-        <div class="header-ui">
-            <h2 style="margin:0;"><i class="fa-solid fa-file-invoice-dollar"></i> Quotation Offer</h2>
-            <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:40px;">
+        <h2 style="color:var(--primary);"><i class="fa-solid fa-file-invoice"></i> Create New Quotation Offer</h2>
+        
+        <div class="grid-3">
+            <div><label>Client Full Name</label><input type="text" id="q_name" placeholder="Adam"></div>
+            <div><label>Phone Number</label><input type="text" id="q_phone" placeholder="+20..."></div>
+            <div><label>Security Deposit (EGP)</label><input type="number" id="q_dep" value="5000"></div>
         </div>
 
-        <div class="grid">
-            <div>
-                <label>Client Full Name</label>
-                <input type="text" id="q_name" placeholder="John Doe">
-            </div>
-            <div>
-                <label>Phone Number</label>
-                <input type="text" id="q_phone" placeholder="+20 1XXXXXXXXX">
-            </div>
-        </div>
-
-        <div class="grid">
-            <div>
-                <label>Select Vehicle</label>
-                <select id="q_car" onchange="updateRate()">
-                    <option value="1200">MG 5 (Comfort)</option>
+        <div class="grid-3">
+            <div><label>Select Vehicle</label>
+                <select id="q_car">
                     <option value="1500">MG ZS (SUV)</option>
+                    <option value="1200">MG 5 (Sedan)</option>
                     <option value="1800">Hyundai Tucson</option>
                     <option value="2500">Jetour X90 Plus</option>
                     <option value="1100">Nissan Sunny</option>
+                    <option value="1600">Haval Jolion</option>
                 </select>
             </div>
-            <div>
-                <label>Daily Rate (EGP)</label>
-                <input type="number" id="q_rate" value="1200">
+            <div><label>Pickup Date & Time</label><input type="datetime-local" id="q_start" onchange="calcDays()"></div>
+            <div><label>Dropoff Date & Time</label><input type="datetime-local" id="q_end" onchange="calcDays()"></div>
+        </div>
+
+        <div class="grid-4">
+            <div><label>Daily Rent (EGP)</label><input type="number" id="q_rate" value="1500"></div>
+            <div><label>Insurance / Day</label><input type="number" id="q_ins_rate" value="0"></div>
+            <div><label>Delivery Fees</label><input type="number" id="q_del" value="0"></div>
+            <div><label>Days Calculated</label><input type="text" id="q_days_val" readonly style="background:#f0f0f0;"></div>
+        </div>
+
+        <div class="grid-3">
+            <div><label>Insurance Package</label>
+                <select id="q_ins_pack">
+                    <option value="Basic">Basic (100% Client Liability)</option>
+                    <option value="Intermediate">Intermediate (70/30 Coverage)</option>
+                    <option value="Full">Full Protection (Zero Liability)</option>
+                </select>
             </div>
-            <div>
-                <label>Duration (Days)</label>
-                <input type="number" id="q_days" value="3">
+            <div><label>KM Package</label>
+                <select id="q_km">
+                    <option value="Standard">Standard (120 KM/Day)</option>
+                    <option value="Unlimited">Unlimited KM (+500/Day)</option>
+                </select>
             </div>
         </div>
 
-        <div class="grid">
-            <div>
-                <label>Insurance Package</label>
-                <select id="q_ins">
-                    <option value="0">Basic (100% Liability)</option>
-                    <option value="200">Intermediate (+200/day)</option>
-                    <option value="500">Full Protection (+500/day)</option>
-                </select>
-            </div>
-            <div>
-                <label>Security Deposit (EGP)</label>
-                <input type="number" id="q_dep" value="5000">
-            </div>
-        </div>
-
-        <button class="btn-generate" onclick="generateQuote()">Create Professional Offer</button>
+        <button class="btn-gen" onclick="generateQuotation()">Generate Quotation Offer</button>
     </div>
 
     <div id="quotationOutput">
-        <div class="a4-quote" id="printableQuote">
+        <div class="a4-quote">
             <div class="quote-header">
-                <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:60px;">
-                <div class="company-meta">
-                    <h2 style="color:var(--primary); margin:0;">PRICE QUOTATION</h2>
-                    <p>Reference: <span id="out_ref">QT-2702-001</span><br>Date: <span id="out_date">27/02/2026</span></p>
+                <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:55px;">
+                <div style="text-align:right;">
+                    <h1 style="margin:0; color:var(--primary);">PRICE QUOTATION</h1>
+                    <p style="margin:0; font-weight:bold;">Ref: <span id="out_ref"></span> | Date: <span id="out_date"></span></p>
                 </div>
             </div>
 
-            <div class="client-bar">
-                <div><strong>PREPARED FOR:</strong> <span id="out_name">Client Name</span></div>
-                <div><strong>PHONE:</strong> <span id="out_phone">+20...</span></div>
+            <div class="client-info-bar">
+                <div><strong>CLIENT:</strong> <span id="out_name"></span><br><strong>PHONE:</strong> <span id="out_phone"></span></div>
+                <div style="text-align:right;"><strong>PERIOD:</strong> <span id="out_period"></span><br><strong>DURATION:</strong> <span id="out_dur"></span></div>
             </div>
 
-            <table class="table-offer">
+            <table class="table-fin">
                 <thead>
-                    <tr>
-                        <th>Service Description</th>
-                        <th>Qty</th>
-                        <th>Daily Rate</th>
-                        <th>Total</th>
-                    </tr>
+                    <tr><th>Description</th><th>Rate Calculation</th><th style="text-align:right;">Amount (EGP)</th></tr>
                 </thead>
-                <tbody id="out_table_body">
-                    </tbody>
+                <tbody id="out_table"></tbody>
+                <tfoot>
+                    <tr style="font-weight:bold; background:#eee;"><td colspan="2" align="right">TOTAL OFFER VALUE:</td><td align="right" id="out_total"></td></tr>
+                </tfoot>
             </table>
 
-            <div style="display: flex; justify-content: space-between;">
-                <div style="width: 50%;">
-                    <div class="ins-highlight">
-                        <strong style="color:var(--accent);"><i class="fa-solid fa-shield-halved"></i> SELECTED INSURANCE</strong><br>
-                        <small id="out_ins_desc">Package details will appear here based on your selection.</small>
-                    </div>
-                    <p style="font-size: 9pt;">* Valid for 48 hours.<br>* Final availability confirmed upon booking.</p>
-                </div>
-                <div class="total-box">
-                    <div class="total-row"><span>Rental Subtotal:</span> <span id="out_sub">0 EGP</span></div>
-                    <div class="total-row"><span>Insurance:</span> <span id="out_ins_total">0 EGP</span></div>
-                    <div class="grand-total"><div class="total-row"><span>Grand Total:</span> <span id="out_grand">0 EGP</span></div></div>
-                    <div style="margin-top:10px; font-size:10pt; color:var(--accent);"><strong>Security Deposit:</strong> <span id="out_dep">0 EGP</span></div>
-                </div>
+            <div class="ins-box">
+                <h4 style="margin:0 0 5px 0; color:var(--accent); text-transform:uppercase;"><i class="fa-solid fa-shield-check"></i> <span id="out_ins_title"></span></h4>
+                <p style="margin:0; font-size:9pt;" id="out_ins_body"></p>
             </div>
 
-            <div class="terms-section">
-                <strong>QUICK TERMS:</strong><br>
-                1. Age: 21+ years. 2. License: Valid for 1+ year. 3. KM Limit: 120km/day included. 
-                4. Fuel: Return at same level. 5. Extensions: Must be requested 24h in advance.
-                6. Cancellation: Free up to 48h before pickup.
-                7. Smoking is strictly prohibited inside vehicles.
+            <div style="font-weight:bold; margin-bottom:10px; color:var(--primary); border-bottom:1px solid #ddd;">TERMS & CONDITIONS Summary</div>
+            <div class="terms-grid">
+                <div><strong>1. ELIGIBILITY:</strong> Min age 21 with valid license for 1+ year. Authorized drivers only.</div>
+                <div><strong>2. KM LIMIT:</strong> Standard 120KM/day. Excess KM charged at return.</div>
+                <div><strong>3. FUEL:</strong> Must return at same pickup level to avoid shortage fees[cite: 115, 118].</div>
+                <div><strong>4. CLEANING:</strong> Dirty return incurs a 350 EGP fee[cite: 80].</div>
+                <div><strong>5. INSURANCE VOID:</strong> Null if no police report provided or driving under influence[cite: 67, 68].</div>
+                <div><strong>6. DEPOSIT:</strong> Refunded upon safe return in same currency/method[cite: 83, 84].</div>
             </div>
 
-            <div style="margin-top: 50px; display: flex; justify-content: space-between; border-top: 1px solid #eee; padding-top: 20px;">
-                <div style="text-align: center;">
-                    <p>Brothers EGY Sales Team</p>
-                    <div style="height: 40px;"></div>
-                    <p>____________________</p>
-                </div>
-                <div style="text-align: center;">
-                    <p>Client Acceptance</p>
-                    <div style="height: 40px;"></div>
-                    <p>____________________</p>
-                </div>
+            <div style="margin-top:40px; display:flex; justify-content:space-between; text-align:center;">
+                <div style="width:40%;">Brothers EGY Sales Team<br><br><br>____________________</div>
+                <div style="width:40%;">Client Acceptance<br><br><br>____________________</div>
             </div>
         </div>
-        <div style="text-align:center; margin-top:20px;">
-            <button class="btn-print-action btn-generate" onclick="window.print()" style="width:200px;">Print / Save PDF</button>
-        </div>
+        <div style="text-align:center; padding:20px;"><button class="btn-gen btn-print" onclick="window.print()" style="width:250px;">Print Quotation</button></div>
     </div>
 
     <script>
-        function updateRate() {
-            const carSelect = document.getElementById('q_car');
-            document.getElementById('q_rate').value = carSelect.value;
+        function calcDays() {
+            const start = new Date(document.getElementById('q_start').value);
+            const end = new Date(document.getElementById('q_end').value);
+            if (start && end && end > start) {
+                const diff = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+                document.getElementById('q_days_val').value = diff + " Days";
+                return diff;
+            }
+            return 0;
         }
 
-        function generateQuote() {
-            const name = document.getElementById('q_name').value || "Valued Client";
-            const phone = document.getElementById('q_phone').value || "Not Provided";
+        function generateQuotation() {
+            const days = calcDays() || 1;
             const car = document.getElementById('q_car').options[document.getElementById('q_car').selectedIndex].text;
             const rate = parseFloat(document.getElementById('q_rate').value);
-            const days = parseInt(document.getElementById('q_days').value);
-            const insRate = parseFloat(document.getElementById('q_ins').value);
-            const deposit = parseFloat(document.getElementById('q_dep').value);
+            const insRate = parseFloat(document.getElementById('q_ins_rate').value);
+            const delFee = parseFloat(document.getElementById('q_del').value);
+            const kmPack = document.getElementById('q_km').value;
+            const insPack = document.getElementById('q_ins_pack').value;
 
-            // Calculations
-            const subtotal = rate * days;
-            const insTotal = insRate * days;
-            const grandTotal = subtotal + insTotal;
+            const baseRent = rate * days;
+            const totalIns = insRate * days;
+            const kmFee = kmPack === 'Unlimited' ? 500 * days : 0;
+            const total = baseRent + totalIns + delFee + kmFee;
 
-            // Insurance Description
-            let insDesc = "";
-            const insVal = document.getElementById('q_ins').value;
-            if(insVal == "0") insDesc = "Basic Plan: Standard CDW included. Client remains liable for 100% of body damages, glass, and tires.";
-            else if(insVal == "200") insDesc = "Intermediate Plan: Reduced liability. 70/30 coverage split on body damages.";
-            else insDesc = "Full Protection: Zero deductible. Maximum peace of mind with full coverage on body and mechanicals.";
-
-            // UI Update
-            document.getElementById('out_name').innerText = name;
-            document.getElementById('out_phone').innerText = phone;
-            document.getElementById('out_ref').innerText = "QT-" + Math.floor(1000 + Math.random() * 9000);
+            // Update UI
+            document.getElementById('out_ref').innerText = "QT-" + Math.floor(Math.random()*90000);
             document.getElementById('out_date').innerText = new Date().toLocaleDateString('en-GB');
+            document.getElementById('out_name').innerText = document.getElementById('q_name').value;
+            document.getElementById('out_phone').innerText = document.getElementById('q_phone').value;
+            document.getElementById('out_period').innerText = document.getElementById('q_start').value.replace('T',' ') + " to " + document.getElementById('q_end').value.replace('T',' ');
+            document.getElementById('out_dur').innerText = days + " Days";
+
+            let tableHtml = `<tr><td>Vehicle Rental: ${car}</td><td>${rate} x ${days} Days</td><td align="right">${baseRent.toLocaleString()}</td></tr>`;
+            if(totalIns > 0) tableHtml += `<tr><td>Insurance Fee (${insPack})</td><td>${insRate} x ${days} Days</td><td align="right">${totalIns.toLocaleString()}</td></tr>`;
+            if(kmFee > 0) tableHtml += `<tr><td>Unlimited KM Package</td><td>500 x ${days} Days</td><td align="right">${kmFee.toLocaleString()}</td></tr>`;
+            if(delFee > 0) tableHtml += `<tr><td>Delivery/Collection Fee</td><td>Fixed</td><td align="right">${delFee.toLocaleString()}</td></tr>`;
             
-            document.getElementById('out_table_body').innerHTML = `
-                <tr>
-                    <td><strong>Vehicle Rental:</strong> ${car}</td>
-                    <td>${days} Days</td>
-                    <td>${rate.toLocaleString()}</td>
-                    <td>${subtotal.toLocaleString()} EGP</td>
-                </tr>
-                ${insRate > 0 ? `<tr><td>Insurance Surcharge</td><td>${days} Days</td><td>${insRate}</td><td>${insTotal.toLocaleString()} EGP</td></tr>` : ''}
-            `;
+            document.getElementById('out_table').innerHTML = tableHtml;
+            document.getElementById('out_total').innerText = total.toLocaleString() + " EGP";
 
-            document.getElementById('out_sub').innerText = subtotal.toLocaleString() + " EGP";
-            document.getElementById('out_ins_total').innerText = insTotal.toLocaleString() + " EGP";
-            document.getElementById('out_grand').innerText = grandTotal.toLocaleString() + " EGP";
-            document.getElementById('out_dep').innerText = deposit.toLocaleString() + " EGP";
-            document.getElementById('out_ins_desc').innerText = insDesc;
-
+            // Insurance Details
+            document.getElementById('out_ins_title').innerText = insPack + " Insurance Package Coverage";
+            const insTexts = {
+                "Basic": "High Deductible. Client pays 100% for Glass, Tires, and Undercarriage damages.",
+                "Intermediate": "Reduced Liability. Client pays 70% of costs, Company covers 30%.",
+                "Full": "Zero Deductible. Reduces liability to ZERO for body/glass/tires subject to plan caps."
+            };
+            document.getElementById('out_ins_body').innerText = insTexts[insPack];
+            
             document.getElementById('quotationOutput').style.display = 'block';
-            window.scrollTo({ top: document.getElementById('quotationOutput').offsetTop, behavior: 'smooth' });
+            window.scrollTo(0, document.getElementById('quotationOutput').offsetTop);
         }
     </script>
 </body>
