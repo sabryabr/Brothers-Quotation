@@ -10,54 +10,38 @@
         
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 10px; color: #333; }
 
-        /* Responsive Container */
         .floating-header {
             max-width: 1050px; margin: 10px auto; background: white;
             border: 3px solid var(--primary); border-radius: 50px; padding: 10px 20px;
             display: flex; justify-content: space-between; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         }
         
-        .setup-container { max-width: 1050px; margin: 20px auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-
-        /* Responsive Grid System */
+        .setup-container { max-width: 1050px; margin: 20px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .section-head { font-size: 14px; font-weight: 800; color: var(--secondary); text-transform: uppercase; margin: 25px 0 10px 0; border-bottom: 2px solid #eee; display: flex; align-items: center; gap: 8px; }
         
-        .responsive-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
-            gap: 15px; 
-            margin-bottom: 12px; 
-        }
+        .responsive-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 12px; }
 
         label { display: block; font-size: 10px; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 4px; }
         input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
         
-        .btn-gen { 
-            background: var(--primary); color: white; border: none; padding: 18px; width: 100%; 
-            border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; 
-            margin-top: 20px; transition: 0.3s; font-size: 16px;
-        }
+        .btn-gen { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; font-size: 16px; transition: 0.3s; }
+        .btn-gen:hover { background: #033a75; }
 
-        /* Proposal Output Styles */
         #quotationOutput { display: none; margin-top: 30px; }
-        .a4-quote { 
-            max-width: 800px; min-height: 297mm; padding: 40px; margin: 0 auto; 
-            background: white; box-shadow: 0 0 20px rgba(0,0,0,0.1); position: relative; 
-            font-size: 13px; color: #000; overflow-x: auto;
-        }
+        .a4-quote { max-width: 850px; padding: 40px; margin: 0 auto; background: white; box-shadow: 0 0 20px rgba(0,0,0,0.1); font-size: 13px; color: #000; }
 
         .box-section { border: 1px solid #000; padding: 15px; margin-bottom: 20px; position: relative; border-radius: 4px; }
         .bs-title { background: #000; color: white; padding: 2px 10px; font-weight: bold; font-size: 11px; position: absolute; top: -12px; left: 10px; text-transform: uppercase; }
         
         table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background: #f8f9fa; font-weight: bold; }
+        th, td { border: 1px solid #000; padding: 10px; text-align: left; }
+        th { background: #f0f0f0; font-weight: bold; }
 
-        /* Mobile specific adjustments */
+        .terms-grid { font-size: 7.5pt; column-count: 2; column-gap: 25px; text-align: justify; color: #333; border-top: 1px solid #eee; padding-top: 10px; line-height: 1.4; }
+
         @media (max-width: 600px) {
             .floating-header { border-radius: 20px; flex-direction: column; gap: 10px; text-align: center; }
             .a4-quote { padding: 15px; font-size: 11px; }
-            .btn-gen { padding: 15px; font-size: 14px; }
         }
 
         @media print {
@@ -71,18 +55,18 @@
 
     <div class="floating-header">
         <div style="display:flex; align-items:center; gap:10px;">
-            <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:35px;" alt="Logo">
+            <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:35px;">
             <h2 style="margin:0; color:var(--primary); font-size:16px;">Price Proposal System</h2>
         </div>
         <div id="clock" style="font-family: monospace; font-weight: bold; color: var(--primary);">--:--:--</div>
     </div>
 
     <div class="setup-container">
-        <div class="section-head"><i class="fa-solid fa-user"></i> 1. Client & Dates</div>
+        <div class="section-head"><i class="fa-solid fa-user"></i> 1. Client & Period</div>
         <div class="responsive-grid">
-            <div><label>Client Full Name</label><input type="text" id="q_name" placeholder="Adam Ahmed"></div>
-            <div><label>Pickup Date/Time</label><input type="datetime-local" id="q_start" onchange="updateCalculations()"></div>
-            <div><label>Dropoff Date/Time</label><input type="datetime-local" id="q_end" onchange="updateCalculations()"></div>
+            <div><label>Client Full Name</label><input type="text" id="q_name" placeholder="John Smith"></div>
+            <div><label>Pickup Date/Time</label><input type="datetime-local" id="q_start" onchange="updateCalc()"></div>
+            <div><label>Dropoff Date/Time</label><input type="datetime-local" id="q_end" onchange="updateCalc()"></div>
         </div>
         <div class="responsive-grid">
             <div><label>Pickup Location</label><input type="text" id="q_p_loc" placeholder="Airport / Hotel / Office"></div>
@@ -93,42 +77,50 @@
         <div class="responsive-grid">
             <div><label>Select From Fleet</label>
                 <select id="q_car" onchange="updateCarRate()">
-                    <option value="48" data-rate="2800">Jetour X90 Plus</option>
-                    <option value="47" data-rate="2200">Hyundai Tucson</option>
-                    <option value="33" data-rate="2100">Haval Jolion</option>
-                    <option value="34" data-rate="1800">MG ZS</option>
-                    <option value="42" data-rate="1400">MG 5</option>
-                    <option value="40" data-rate="1200">Nissan Sunny</option>
+                    <option value="48" data-rate="2800">Jetour X90 Plus (2026)</option>
+                    <option value="47" data-rate="2200">Hyundai Tucson (2022)</option>
+                    <option value="33" data-rate="2100">Haval Jolion (2022)</option>
+                    <option value="43" data-rate="1700">Renault Duster (2025)</option>
+                    <option value="34" data-rate="1800">MG ZS (2025)</option>
+                    <option value="42" data-rate="1400">MG 5 (2026)</option>
+                    <option value="40" data-rate="1200">Nissan Sunny (2023)</option>
+                    <option value="38" data-rate="1100">Chevrolet Aveo (2020)</option>
                 </select>
             </div>
-            <div><label>Daily Rent (EGP)</label><input type="number" id="q_rate" oninput="updateCalculations()"></div>
+            <div><label>Daily Rent (EGP)</label><input type="number" id="q_rate" oninput="updateCalc()"></div>
             <div><label>Duration</label><input type="text" id="q_days_val" readonly style="background:#eee;"></div>
         </div>
 
         <div class="section-head"><i class="fa-solid fa-road"></i> 3. Mileage & Insurance</div>
         <div class="responsive-grid">
-            <div><label>KM Package</label>
-                <select id="q_km_type" onchange="updateCalculations()">
+            <div><label>Extra KM Package</label>
+                <select id="q_km_type" onchange="updateCalc()">
                     <option value="Standard" data-km="0">Standard (120 KM/Day)</option>
-                    <option value="500 KM Extra" data-km="500">500 KM</option>
-                    <option value="1000 KM Extra" data-km="1000">1000 KM</option>
+                    <option value="500 KM Extra" data-km="500">500 KM Extra</option>
+                    <option value="750 KM Extra" data-km="750">750 KM Extra</option>
+                    <option value="1000 KM Extra" data-km="1000">1000 KM Extra</option>
+                    <option value="1500 KM Extra" data-km="1500">1500 KM Extra</option>
+                    <option value="2000 KM Extra" data-km="2000">2000 KM Extra</option>
+                    <option value="3000 KM Extra" data-km="3000">3000 KM Extra</option>
                     <option value="Unlimited" data-km="999999">Unlimited KM</option>
                 </select>
             </div>
-            <div><label>KM Package Cost (Total)</label><input type="number" id="q_km_cost" value="0" oninput="updateCalculations()"></div>
+            <div><label>KM Package Cost (Total)</label><input type="number" id="q_km_cost" value="0" oninput="updateCalc()"></div>
             <div><label>Insurance Plan</label>
-                <select id="q_ins_pack" onchange="updateCalculations()">
+                <select id="q_ins_pack" onchange="updateCalc()">
                     <option value="Basic">Basic (100% Liability)</option>
                     <option value="Intermediate">Intermediate (70/30)</option>
                     <option value="Full">Full Protection (Zero Liability)</option>
                 </select>
             </div>
-            <div><label>Insurance Cost / Day</label><input type="number" id="q_ins_rate" value="0" oninput="updateCalculations()"></div>
+            <div><label>Insurance Cost / Day</label><input type="number" id="q_ins_rate" value="0" oninput="updateCalc()"></div>
         </div>
 
         <div class="section-head"><i class="fa-solid fa-plus-circle"></i> 4. Extras</div>
         <div class="responsive-grid">
-            <div><label>Delivery Fee</label><input type="number" id="q_del" value="0" oninput="updateCalculations()"></div>
+            <div><label>Delivery Fee</label><input type="number" id="q_del" value="0" oninput="updateCalc()"></div>
+            <div><label>Child Seat (Qty)</label><input type="number" id="q_seat" value="0" oninput="updateCalc()"></div>
+            <div><label>Add. Driver (Qty)</label><input type="number" id="q_driver" value="0" oninput="calcTotal()"></div>
             <div><label>Security Deposit</label><input type="number" id="q_dep" value="5000"></div>
         </div>
 
@@ -137,7 +129,7 @@
 
     <div id="quotationOutput">
         <div class="a4-quote">
-            <div style="display: flex; justify-content: space-between; border-bottom: 3px solid var(--primary); padding-bottom: 10px;">
+            <div class="q-header">
                 <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:50px;">
                 <div style="text-align: right;">
                     <h2 style="margin: 0; color: var(--primary);">PRICE PROPOSAL</h2>
@@ -145,10 +137,11 @@
                 </div>
             </div>
 
-            <div class="box-section" style="margin-top: 30px;"><span class="bs-title">CLIENT & PERIOD</span>
+            <div class="box-section" style="margin-top: 25px;"><span class="bs-title">CLIENT & PERIOD</span>
                 <table>
                     <tr><th>Client Name</th><td id="out_name" colspan="3"></td></tr>
                     <tr><th>Pickup</th><td id="out_start"></td><th>Dropoff</th><td id="out_end"></td></tr>
+                    <tr><th>Pickup Loc</th><td id="out_p_loc"></td><th>Dropoff Loc</th><td id="out_d_loc"></td></tr>
                     <tr><th>Duration</th><td id="out_dur"></td><th>KM Allowance</th><td id="out_km_desc"></td></tr>
                 </table>
             </div>
@@ -158,15 +151,34 @@
                     <thead><tr><th>Description</th><th>Details</th><th style="text-align:right;">Total (EGP)</th></tr></thead>
                     <tbody id="out_table"></tbody>
                     <tfoot>
-                        <tr style="font-weight:bold; background:#f0f0f0;"><td colspan="2" align="right">TOTAL QUOTATION:</td><td align="right" id="out_total"></td></tr>
+                        <tr style="font-weight:bold; background:#f0f0f0;"><td colspan="2" align="right">TOTAL PROPOSAL VALUE:</td><td align="right" id="out_total"></td></tr>
+                        <tr><td colspan="2" align="right">Security Deposit (Held):</td><td align="right" id="out_dep_val"></td></tr>
                     </tfoot>
                 </table>
             </div>
 
-            <p style="font-size: 11px; color: #666; margin-top: 20px;">* Security Deposit of <span id="out_dep_val"></span> EGP is required upon pickup.</p>
-            
-            <div style="text-align:center; margin-top:40px; border-top: 1px solid #ddd; padding-top: 20px;">
-                <button class="btn-gen btn-print-action" style="width: 200px;" onclick="window.print()">Print / Save PDF</button>
+            <div class="box-section"><span class="bs-title">INSURANCE & LIABILITY: <span id="out_ins_title"></span></span>
+                <p id="out_ins_body" style="margin:0; font-size:9pt; line-height:1.4;"></p>
+            </div>
+
+            <div style="font-weight:bold; margin-bottom:5px; border-bottom:1px solid #ddd; font-size:9pt; color:var(--primary);">RENTAL TERMS & CONDITIONS</div>
+            <div class="terms-grid">
+                <div><strong>1. ELIGIBILITY:</strong> Min age 21. Valid License (1+ year). Valid ID/Passport mandatory. Authorized drivers only.</div>
+                <div><strong>2. RENTAL CYCLE:</strong> Based on 24-hour units. 5-hour grace period allowed before hourly charges apply.</div>
+                <div><strong>3. MILEAGE:</strong> 120 KM/day included. Summed with purchased package. Excess KM charged per return rates.</div>
+                <div><strong>4. FUEL:</strong> "Same to Same" policy. Return with same fuel level received to avoid service charges.</div>
+                <div><strong>5. INSURANCE VOID:</strong> Plan is null if no official Police Report is provided immediately following an accident.</div>
+                <div><strong>6. PENALTIES:</strong> Key loss ($400), License loss ($250). Dirty return (350 EGP).</div>
+                <div><strong>7. DEPOSIT:</strong> Refunded upon safe return in same currency mix. Card refunds processed as EGP Cash.</div>
+                <div><strong>8. LIABILITY:</strong> Lessee bears full legal and criminal liability for the rented vehicle during the rental period.</div>
+            </div>
+
+            <div style="text-align:center; margin-top:30px; font-weight:bold; color:var(--primary); border-top:1px solid var(--primary); padding-top:10px;">
+                Best Regards, Brothers EGY Team
+            </div>
+
+            <div style="text-align:center; margin-top:30px;" class="btn-print-action">
+                <button class="btn-gen" style="width: 200px;" onclick="window.print()">Print / Save PDF</button>
             </div>
         </div>
     </div>
@@ -177,77 +189,81 @@
 
         function updateCarRate() {
             const sel = document.getElementById('q_car');
-            const rate = sel.options[sel.selectedIndex].getAttribute('data-rate');
-            document.getElementById('q_rate').value = rate;
-            updateCalculations();
+            document.getElementById('q_rate').value = sel.options[sel.selectedIndex].getAttribute('data-rate');
+            updateCalc();
         }
 
-        function updateCalculations() {
-            const sStr = document.getElementById('q_start').value;
-            const eStr = document.getElementById('q_end').value;
-            if (sStr && eStr) {
-                const s = new Date(sStr); const e = new Date(eStr);
+        function updateCalc() {
+            const s = new Date(document.getElementById('q_start').value);
+            const e = new Date(document.getElementById('q_end').value);
+            if (e > s) {
                 const diff = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
-                document.getElementById('q_days_val').value = (diff > 0 ? diff : 1) + " Days";
+                document.getElementById('q_days_val').value = diff + " Days";
             }
         }
 
         function generateProposal() {
-            const clientName = document.getElementById('q_name').value || 'Valued Client';
+            const name = document.getElementById('q_name').value || 'John Smith';
             const sDate = document.getElementById('q_start').value;
             const eDate = document.getElementById('q_end').value;
-            
-            if(!sDate || !eDate) { alert("Please select Pickup and Dropoff dates"); return; }
+            if(!sDate || !eDate) { alert("Select Dates First"); return; }
 
             const s = new Date(sDate); const e = new Date(eDate);
             const days = Math.ceil((e - s) / (1000 * 60 * 60 * 24)) || 1;
-            
-            const refNum = "PR-" + Math.floor(Math.random()*90000);
+            const ref = "PR-" + Math.floor(Math.random()*90000);
             const dateStr = new Date().toLocaleDateString('en-GB');
 
-            // Set Document Title for PDF Naming
-            document.title = `${refNum}_${clientName}_${dateStr.replace(/\//g,'-')}`;
+            // Naming for PDF
+            document.getElementById('page-title').innerText = `${ref}_${name}_${dateStr.replace(/\//g,'-')}`;
 
-            // Financials
             const rate = parseFloat(document.getElementById('q_rate').value) || 0;
             const insRate = parseFloat(document.getElementById('q_ins_rate').value) || 0;
             const kmCost = parseFloat(document.getElementById('q_km_cost').value) || 0;
-            const delFee = parseFloat(document.getElementById('q_del').value) || 0;
-            
-            const baseRent = rate * days;
+            const del = parseFloat(document.getElementById('q_del').value) || 0;
+            const seat = parseInt(document.getElementById('q_seat').value) || 0;
+            const extraDr = parseInt(document.getElementById('q_driver').value) || 0;
+
+            const totalSeat = seat * 250 * days;
+            const totalDriver = extraDr * 150 * days;
+            const totalBase = rate * days;
             const totalIns = insRate * days;
-            const grandTotal = baseRent + totalIns + kmCost + delFee;
+            const grandTotal = totalBase + totalIns + kmCost + del + totalSeat + totalDriver;
 
-            // KM Logic
             const kmSel = document.getElementById('q_km_type');
-            const pkgKM = parseInt(kmSel.options[kmSel.selectedIndex].getAttribute('data-km'));
-            const totalKM = pkgKM >= 999999 ? "Unlimited" : (days * 120 + pkgKM).toLocaleString() + " KM Total";
+            const extraKM = parseInt(kmSel.options[kmSel.selectedIndex].getAttribute('data-km'));
+            const totalKM = extraKM >= 999999 ? "Unlimited" : (days * 120 + extraKM).toLocaleString() + " KM Total";
 
-            // Output
-            document.getElementById('out_ref').innerText = refNum;
+            document.getElementById('out_ref').innerText = ref;
             document.getElementById('out_date').innerText = dateStr;
-            document.getElementById('out_name').innerText = clientName;
+            document.getElementById('out_name').innerText = name;
             document.getElementById('out_start').innerText = s.toLocaleString();
             document.getElementById('out_end').innerText = e.toLocaleString();
+            document.getElementById('out_p_loc').innerText = document.getElementById('q_p_loc').value || 'Office';
+            document.getElementById('out_d_loc').innerText = document.getElementById('q_d_loc').value || 'Office';
             document.getElementById('out_dur').innerText = days + " Days";
             document.getElementById('out_km_desc').innerText = totalKM;
             document.getElementById('out_total').innerText = grandTotal.toLocaleString() + " EGP";
-            document.getElementById('out_dep_val').innerText = document.getElementById('q_dep').value;
+            document.getElementById('out_dep_val').innerText = document.getElementById('q_dep').value + " EGP";
 
-            // Build Table
-            let tableHTML = `<tr><td>Rental: ${document.getElementById('q_car').options[document.getElementById('q_car').selectedIndex].text}</td><td>${rate} x ${days} Days</td><td align="right">${baseRent.toLocaleString()}</td></tr>`;
-            if(totalIns > 0) tableHTML += `<tr><td>Insurance (${document.getElementById('q_ins_pack').value})</td><td>${insRate} x ${days} Days</td><td align="right">${totalIns.toLocaleString()}</td></tr>`;
-            if(kmCost > 0) tableHTML += `<tr><td>KM Package (${kmSel.value})</td><td>Fixed</td><td align="right">${kmCost.toLocaleString()}</td></tr>`;
-            if(delFee > 0) tableHTML += `<tr><td>Delivery Fee</td><td>Fixed</td><td align="right">${delFee.toLocaleString()}</td></tr>`;
+            let table = `<tr><td>Rental: ${document.getElementById('q_car').options[document.getElementById('q_car').selectedIndex].text}</td><td>${rate.toLocaleString()} x ${days} Days</td><td align="right">${totalBase.toLocaleString()}</td></tr>`;
+            if(totalIns > 0) table += `<tr><td>Insurance (${document.getElementById('q_ins_pack').value})</td><td>${insRate.toLocaleString()} x ${days} Days</td><td align="right">${totalIns.toLocaleString()}</td></tr>`;
+            if(kmCost > 0) table += `<tr><td>KM Package (${kmSel.value})</td><td>Fixed Fee</td><td align="right">${kmCost.toLocaleString()}</td></tr>`;
+            if(totalSeat > 0) table += `<tr><td>Child Car Seat (Qty: ${seat})</td><td>250 x ${days} Days</td><td align="right">${totalSeat.toLocaleString()}</td></tr>`;
+            if(totalDriver > 0) table += `<tr><td>Additional Driver (Qty: ${extraDr})</td><td>150 x ${days} Days</td><td align="right">${totalDriver.toLocaleString()}</td></tr>`;
+            if(del > 0) table += `<tr><td>Delivery/Collection Fee</td><td>Fixed</td><td align="right">${del.toLocaleString()}</td></tr>`;
             
-            document.getElementById('out_table').innerHTML = tableHTML;
+            document.getElementById('out_table').innerHTML = table;
+            document.getElementById('out_ins_title').innerText = document.getElementById('q_ins_pack').value.toUpperCase();
+            
+            const insTexts = {
+                [span_3](start_span)[span_4](start_span)"Basic": "Basic CDW (100% Liability): Client is responsible for all body damages, glass, tires, and lost rental days. High deductible applies[span_3](end_span)[span_4](end_span).",
+                "Intermediate": "Reduced Liability (70/30): Client pays 70% of repair costs. Company covers 30%.",
+                "Full": "Zero Deductible Waiver: Reduces liability to ZERO for covered body, glass, and undercarriage items within plan caps."
+            };
+            document.getElementById('out_ins_body').innerText = insTexts[document.getElementById('q_ins_pack').value];
             document.getElementById('quotationOutput').style.display = 'block';
-            
-            // Auto-scroll to proposal
             document.getElementById('quotationOutput').scrollIntoView({ behavior: 'smooth' });
         }
-        
-        // Initial rate load
         updateCarRate();
     </script>
 </body>
