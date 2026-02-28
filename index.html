@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary: #04509D; --secondary: #2c3e50; --accent: #e67e22; --bg: #f0f3f6; }
-        
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 10px; color: #333; }
 
         .floating-header {
@@ -15,29 +14,29 @@
             border: 3px solid var(--primary); border-radius: 50px; padding: 10px 20px;
             display: flex; justify-content: space-between; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         }
-        
+        .live-clock { font-family: monospace; font-weight: bold; font-size: 14px; color: var(--primary); }
+
         .setup-container { max-width: 1050px; margin: 20px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .section-head { font-size: 14px; font-weight: 800; color: var(--secondary); text-transform: uppercase; margin: 25px 0 10px 0; border-bottom: 2px solid #eee; display: flex; align-items: center; gap: 8px; }
-        
         .responsive-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 12px; }
 
         label { display: block; font-size: 10px; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 4px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-        
+        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
         .btn-gen { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; font-size: 16px; transition: 0.3s; }
         .btn-gen:hover { background: #033a75; }
 
         #quotationOutput { display: none; margin-top: 30px; }
         .a4-quote { max-width: 850px; padding: 40px; margin: 0 auto; background: white; box-shadow: 0 0 20px rgba(0,0,0,0.1); font-size: 13px; color: #000; position: relative; }
+        .q-header { display: flex; justify-content: space-between; border-bottom: 2px solid var(--primary); margin-bottom: 15px; padding-bottom:10px; align-items: center; }
 
         .box-section { border: 1px solid #000; padding: 15px; margin-bottom: 20px; position: relative; border-radius: 4px; }
         .bs-title { background: #000; color: white; padding: 2px 10px; font-weight: bold; font-size: 11px; position: absolute; top: -12px; left: 10px; text-transform: uppercase; }
-        
         table { width: 100%; border-collapse: collapse; margin: 10px 0; }
         th, td { border: 1px solid #000; padding: 10px; text-align: left; }
         th { background: #f0f0f0; font-weight: bold; }
 
         .terms-grid { font-size: 7.5pt; column-count: 2; column-gap: 25px; text-align: justify; color: #333; border-top: 1px solid #eee; padding-top: 10px; line-height: 1.4; }
+        .full-terms-link { display: block; color: var(--primary); font-weight: bold; text-decoration: none; margin-bottom: 5px; }
 
         @media (max-width: 600px) {
             .floating-header { border-radius: 20px; flex-direction: column; gap: 10px; text-align: center; }
@@ -92,7 +91,7 @@
         </div>
 
         <div class="section-head"><i class="fa-solid fa-road"></i> 3. Mileage & Insurance</div>
-        <div class="grid-4" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+        <div class="responsive-grid">
             <div><label>Extra KM Package</label>
                 <select id="q_km_type" onchange="updateCalc()">
                     <option value="Standard" data-km="0">Standard (120 KM/Day)</option>
@@ -145,9 +144,7 @@
             </div>
 
             <div class="box-section"><span class="bs-title">VEHICLE DETAILS</span>
-                <table>
-                    <tr><th>Model</th><td id="out_car" colspan="3"></td></tr>
-                </table>
+                <table><tr><th>Model</th><td id="out_car" colspan="3"></td></tr></table>
             </div>
 
             <div class="box-section"><span class="bs-title">FINANCIAL BREAKDOWN</span>
@@ -165,16 +162,26 @@
                 <p id="out_ins_body" style="margin:0; font-size:9pt; line-height:1.4;"></p>
             </div>
 
-            <div style="font-weight:bold; margin-bottom:5px; border-bottom:1px solid #ddd; font-size:9pt; color:var(--primary);">RENTAL TERMS & CONDITIONS</div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;">
+                <div style="font-weight:bold; border-bottom:1px solid #ddd; font-size:9pt; color:var(--primary); flex-grow: 1;">
+                    RENTAL TERMS & CONDITIONS<br>
+                    <a href="https://brothersegy.com/terms-conditions/" class="full-terms-link" target="_blank">View Detailed Full Terms & FAQ Online</a>
+                </div>
+                <div style="text-align: right; margin-left: 20px;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://brothersegy.com/terms-conditions/&size=60x60" style="height:50px;" alt="QR Code">
+                    <div style="font-size: 7pt; font-weight: bold;">SCAN FOR FAQ & FULL TERMS</div>
+                </div>
+            </div>
+            
             <div class="terms-grid">
-                <div><strong>1. ELIGIBILITY:</strong> Min age 21. Valid License (1+ year). Valid ID/Passport mandatory. Authorized drivers only.</div>
-                <div><strong>2. RENTAL CYCLE:</strong> Based on 24-hour units. 5-hour grace period allowed before hourly charges apply.</div>
-                <div><strong>3. MILEAGE:</strong> 120 KM/day included. Summed with purchased package. Excess KM charged per return rates.</div>
-                <div><strong>4. FUEL:</strong> "Same to Same" policy. Return with same fuel level received to avoid service charges.</div>
-                <div><strong>5. INSURANCE VOID:</strong> Plan is null if no official Police Report is provided immediately following an accident.</div>
-                <div><strong>6. PENALTIES:</strong> Key loss ($400), License loss ($250). Dirty return (350 EGP).</div>
-                <div><strong>7. DEPOSIT:</strong> Refunded upon safe return in same currency mix. Card refunds processed as EGP Cash.</div>
-                <div><strong>8. LIABILITY:</strong> Lessee bears full legal and criminal liability for the rented vehicle during the rental period.</div>
+                [span_0](start_span)<div><strong>1. ELIGIBILITY:</strong> Min age 21. Valid License and ID/Passport mandatory[span_0](end_span). [span_1](start_span)Authorized drivers only[span_1](end_span).</div>
+                <div><strong>2. [span_2](start_span)RENTAL CYCLE:</strong> Based on 24-hour units[span_2](end_span). [span_3](start_span)5-hour grace period allowed before hourly charges apply[span_3](end_span). [span_4](start_span)If exceeded by 5 hours, a full day's rent is charged[span_4](end_span).</div>
+                <div><strong>3. [span_5](start_span)MILEAGE:</strong> 120 KM/day included[span_5](end_span). Summed with purchased package. [span_6](start_span)Excess KM charged per return rates[span_6](end_span).</div>
+                <div><strong>4. [span_7](start_span)FUEL:</strong> "Same to Same" policy[span_7](end_span). Return with same fuel level received to avoid service charges.</div>
+                <div><strong>5. [span_8](start_span)INSURANCE VOID:</strong> Plan is null if no official Police Report is provided immediately following an accident[span_8](end_span).</div>
+                <div><strong>6. [span_9](start_span)PENALTIES:</strong> Key loss ($400), License loss ($250), Tire damage ($200/tire)[span_9](end_span). [span_10](start_span)Dirty return (350 EGP)[span_10](end_span).</div>
+                <div><strong>7. [span_11](start_span)DEPOSIT:</strong> Refunded upon safe return in same currency mix[span_11](end_span). [span_12](start_span)Card refunds processed as EGP Cash[span_12](end_span).</div>
+                <div><strong>8. [span_13](start_span)LIABILITY:</strong> Lessee bears full legal and criminal liability for the vehicle during the rental period[span_13](end_span).</div>
             </div>
 
             <div style="text-align:center; margin-top:30px; font-weight:bold; color:var(--primary); border-top:1px solid var(--primary); padding-top:10px;">
@@ -188,7 +195,6 @@
     </div>
 
     <script>
-        // --- 1. LIVE CLOCK ---
         function updateClock() {
             const now = new Date();
             document.getElementById('clock').innerText = now.toLocaleString('en-GB', { 
@@ -199,55 +205,33 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // --- 2. DYNAMIC LOGIC ---
         function updateCarRate() {
             const sel = document.getElementById('q_car');
-            const rate = sel.options[sel.selectedIndex].getAttribute('data-rate');
-            document.getElementById('q_rate').value = rate;
+            document.getElementById('q_rate').value = sel.options[sel.selectedIndex].getAttribute('data-rate');
             updateCalc();
         }
 
         function updateCalc() {
-            const startInput = document.getElementById('q_start').value;
-            const endInput = document.getElementById('q_end').value;
-            
-            if (startInput && endInput) {
-                const s = new Date(startInput);
-                const e = new Date(endInput);
-                if (e > s) {
-                    const diff = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
-                    document.getElementById('q_days_val').value = diff + " Days";
-                } else {
-                    document.getElementById('q_days_val').value = "Invalid Dates";
-                }
+            const s = new Date(document.getElementById('q_start').value);
+            const e = new Date(document.getElementById('q_end').value);
+            if (e > s) {
+                const diff = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
+                document.getElementById('q_days_val').value = diff + " Days";
             }
         }
 
-        // --- 3. GENERATION ---
         function generateProposal() {
             const name = document.getElementById('q_name').value || 'John Smith';
-            const sDateInput = document.getElementById('q_start').value;
-            const eDateInput = document.getElementById('q_end').value;
-            
-            if(!sDateInput || !eDateInput) { 
-                alert("Please select both Pickup and Dropoff dates before generating."); 
-                return; 
-            }
+            const sDate = document.getElementById('q_start').value;
+            const eDate = document.getElementById('q_end').value;
+            if(!sDate || !eDate) { alert("Select Dates First"); return; }
 
-            const s = new Date(sDateInput);
-            const e = new Date(eDateInput);
-            if(e <= s) {
-                alert("Dropoff date must be after Pickup date.");
-                return;
-            }
+            const s = new Date(sDate); const e = new Date(eDate);
+            const days = Math.ceil((e - s) / (1000 * 60 * 60 * 24)) || 1;
+            const ref = "PR-" + Math.floor(Math.random()*90000);
+            const dateStr = new Date().toLocaleDateString('en-GB');
 
-            const days = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
-            const ref = "PR-" + Math.floor(10000 + Math.random() * 89999);
-            const today = new Date();
-            const dateStr = today.toLocaleDateString('en-GB');
-
-            // Set Document Title for PDF Saving (Format: PR-XXXXX_ClientName_Date)
-            document.title = `${ref}_${name.replace(/\s+/g, '_')}_${dateStr.replace(/\//g, '-')}`;
+            document.getElementById('page-title').innerText = `${ref}_${name}_${dateStr.replace(/\//g,'-')}`;
 
             const rate = parseFloat(document.getElementById('q_rate').value) || 0;
             const insRate = parseFloat(document.getElementById('q_ins_rate').value) || 0;
@@ -260,9 +244,8 @@
 
             const kmSel = document.getElementById('q_km_type');
             const extraKM = parseInt(kmSel.options[kmSel.selectedIndex].getAttribute('data-km'));
-            const totalKMText = extraKM >= 999999 ? "Unlimited" : (days * 120 + extraKM).toLocaleString() + " KM Total";
+            const totalKM = extraKM >= 999999 ? "Unlimited" : (days * 120 + extraKM).toLocaleString() + " KM Total";
 
-            // Map data to preview
             document.getElementById('out_ref').innerText = ref;
             document.getElementById('out_date').innerText = dateStr;
             document.getElementById('out_name').innerText = name;
@@ -271,33 +254,28 @@
             document.getElementById('out_p_loc').innerText = document.getElementById('q_p_loc').value || 'Office';
             document.getElementById('out_d_loc').innerText = document.getElementById('q_d_loc').value || 'Office';
             document.getElementById('out_dur').innerText = days + " Days";
-            document.getElementById('out_km_desc').innerText = totalKMText;
             document.getElementById('out_car').innerText = document.getElementById('q_car').options[document.getElementById('q_car').selectedIndex].text;
+            document.getElementById('out_km_desc').innerText = totalKM;
             document.getElementById('out_total').innerText = grandTotal.toLocaleString() + " EGP";
             document.getElementById('out_dep_val').innerText = (parseFloat(document.getElementById('q_dep').value) || 0).toLocaleString() + " EGP";
 
-            // Build Breakdown Table
             let table = `<tr><td>Rental Fee: ${document.getElementById('q_car').options[document.getElementById('q_car').selectedIndex].text}</td><td>${rate.toLocaleString()} x ${days} Days</td><td align="right">${totalBase.toLocaleString()}</td></tr>`;
-            if(totalIns > 0) table += `<tr><td>Insurance Plan (${document.getElementById('q_ins_pack').value})</td><td>${insRate.toLocaleString()} x ${days} Days</td><td align="right">${totalIns.toLocaleString()}</td></tr>`;
+            if(totalIns > 0) table += `<tr><td>Insurance (${document.getElementById('q_ins_pack').value})</td><td>${insRate.toLocaleString()} x ${days} Days</td><td align="right">${totalIns.toLocaleString()}</td></tr>`;
             if(kmCost > 0) table += `<tr><td>Mileage Package (${kmSel.value})</td><td>Flat Fee</td><td align="right">${kmCost.toLocaleString()}</td></tr>`;
-            if(del > 0) table += `<tr><td>Delivery/Location Fee</td><td>Fixed</td><td align="right">${del.toLocaleString()}</td></tr>`;
+            if(del > 0) table += `<tr><td>Delivery Fee</td><td>Fixed</td><td align="right">${del.toLocaleString()}</td></tr>`;
             
             document.getElementById('out_table').innerHTML = table;
             document.getElementById('out_ins_title').innerText = document.getElementById('q_ins_pack').value.toUpperCase();
             
             const insTexts = {
-                "Basic": "Basic CDW (100% Liability): Client is responsible for 100% of costs for Glass, Tires, and Undercarriage damages. High deductible applies to bodywork.",
-                "Intermediate": "Reduced Liability (70/30): Client pays 70% of repair costs. Company covers 30% of bodywork. Excludes glass and tires.",
-                "Full": "Zero Deductible Waiver: Reduces liability to ZERO for covered body, glass, and undercarriage items within standard plan caps."
+                [span_14](start_span)"Basic": "Basic CDW (100% Liability): Client is responsible for 100% of costs for Glass, Tires, and Undercarriage damages[span_14](end_span). High deductible applies to bodywork.",
+                "Intermediate": "Reduced Liability (70/30): Client pays 70% of repair costs. [span_15](start_span)Company covers 30% of bodywork[span_15](end_span). Excludes glass and tires.",
+                [span_16](start_span)"Full": "Zero Deductible Waiver: Reduces liability to ZERO for covered body, glass, and undercarriage items within standard plan caps[span_16](end_span)."
             };
             document.getElementById('out_ins_body').innerText = insTexts[document.getElementById('q_ins_pack').value];
-            
-            // Show Output and Scroll
             document.getElementById('quotationOutput').style.display = 'block';
             document.getElementById('quotationOutput').scrollIntoView({ behavior: 'smooth' });
         }
-
-        // Initialize rates
         window.onload = updateCarRate;
     </script>
 </body>
