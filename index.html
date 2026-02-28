@@ -17,33 +17,33 @@
         .responsive-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 10px; }
         label { display: block; font-size: 10px; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 4px; }
         input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
-        .chk-group { display: flex; align-items: center; gap: 10px; padding: 10px 0; }
-        .chk-group input { width: 18px; height: 18px; cursor: pointer; }
+        .chk-row { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
+        .chk-row input { width: 18px; height: 18px; cursor: pointer; }
         .btn-gen { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 15px; font-size: 16px; transition: 0.3s; }
 
         /* Proposal Output Fix for Single A4 Alignment */
-        #quotationOutput { display: none; margin: 20px auto; }
+        #quotationOutput { display: none; margin: 20px auto; width: 210mm; }
         .a4-quote { 
-            width: 210mm; height: 296.5mm; padding: 12mm 15mm; 
+            width: 210mm; height: 296mm; padding: 10mm 15mm; 
             background: white; margin: 0 auto; box-sizing: border-box; 
             display: flex; flex-direction: column; position: relative; 
             overflow: hidden; 
         }
-        .q-header { display: flex; justify-content: space-between; border-bottom: 2px solid var(--primary); margin-bottom: 15px; padding-bottom: 8px; align-items: center; }
-        .box-section { border: 1px solid #000; padding: 12px; margin-bottom: 15px; position: relative; border-radius: 4px; }
-        .bs-title { background: #000; color: white; padding: 1px 10px; font-weight: bold; font-size: 9.5pt; position: absolute; top: -11px; left: 10px; text-transform: uppercase; }
-        table { width: 100%; border-collapse: collapse; margin: 5px 0; font-size: 9pt; }
-        th, td { border: 1px solid #000; padding: 6px; text-align: left; }
+        .q-header { display: flex; justify-content: space-between; border-bottom: 2px solid var(--primary); margin-bottom: 10px; padding-bottom: 5px; align-items: center; }
+        .box-section { border: 1px solid #000; padding: 10px; margin-bottom: 10px; position: relative; border-radius: 4px; }
+        .bs-title { background: #000; color: white; padding: 1px 10px; font-weight: bold; font-size: 9pt; position: absolute; top: -10px; left: 8px; text-transform: uppercase; }
+        table { width: 100%; border-collapse: collapse; margin: 5px 0; font-size: 8.8pt; }
+        th, td { border: 1px solid #000; padding: 5px; text-align: left; }
         th { background: #f0f0f0; font-weight: bold; }
-        .terms-grid { font-size: 7.5pt; column-count: 2; column-gap: 25px; text-align: justify; color: #000; border-top: 1px solid #eee; padding-top: 12px; line-height: 1.35; }
-        .footer-note { text-align: center; font-weight: bold; font-size: 10pt; color: var(--primary); margin-top: auto; padding-top: 12px; border-top: 1.5px solid var(--primary); }
+        .terms-grid { font-size: 7.2pt; column-count: 2; column-gap: 20px; text-align: justify; color: #000; border-top: 1px solid #eee; padding-top: 10px; line-height: 1.3; }
+        .footer-note { text-align: center; font-weight: bold; font-size: 10pt; color: var(--primary); margin-top: auto; padding-top: 10px; border-top: 1.5px solid var(--primary); }
 
         @media print {
             body { padding: 0; margin: 0; background: white; -webkit-print-color-adjust: exact; }
             .floating-header, .setup-container, .btn-print-action { display: none !important; }
             #quotationOutput { display: block !important; margin: 0; padding: 0; width: 100%; }
-            .a4-quote { box-shadow: none; border: none; width: 210mm; height: 296.5mm; margin: 0; padding: 12mm 15mm; pointer-events: auto; }
-            a { color: #04509D !important; text-decoration: underline !important; z-index: 1000; position: relative; }
+            .a4-quote { box-shadow: none; border: none; width: 210mm; height: 296mm; margin: 0; padding: 10mm 15mm; }
+            a { color: #04509D !important; text-decoration: underline !important; font-weight: bold; }
             @page { size: A4; margin: 0; }
         }
     </style>
@@ -62,8 +62,8 @@
         <div class="section-head"><i class="fa-solid fa-user"></i> 1. Client & Dates</div>
         <div class="responsive-grid">
             <div><label>Client Full Name</label><input type="text" id="q_name" placeholder="John Smith"></div>
-            <div><label>Pickup Date/Time</label><input type="datetime-local" id="q_start" onchange="updateCalc()"></div>
-            <div><label>Dropoff Date/Time</label><input type="datetime-local" id="q_end" onchange="updateCalc()"></div>
+            <div><label>Pickup Date/Time</label><input type="datetime-local" id="q_start" onchange="runCalculations()"></div>
+            <div><label>Dropoff Date/Time</label><input type="datetime-local" id="q_end" onchange="runCalculations()"></div>
         </div>
         <div class="responsive-grid">
             <div><label>Pickup Location</label><input type="text" id="q_p_loc" placeholder="Airport / Hotel / Office"></div>
@@ -72,8 +72,8 @@
 
         <div class="section-head"><i class="fa-solid fa-car"></i> 2. Vehicle Selection</div>
         <div class="responsive-grid">
-            <div><label>Select From Fleet</label>
-                <select id="q_car" onchange="updateCarRate()">
+            <div><label>Select Vehicle</label>
+                <select id="q_car" onchange="updateFleetRate()">
                     <option value="48" data-rate="2800">Jetour X90 Plus</option>
                     <option value="47" data-rate="2200">Hyundai Tucson</option>
                     <option value="33" data-rate="2100">Haval Jolion</option>
@@ -84,67 +84,67 @@
                     <option value="38" data-rate="1100">Chevrolet Aveo</option>
                 </select>
             </div>
-            <div><label>Daily Rent (EGP)</label><input type="number" id="q_rate" value="2800" oninput="updateCalc()"></div>
+            <div><label>Daily Rent (EGP)</label><input type="number" id="q_rate" value="2800" oninput="runCalculations()"></div>
             <div><label>Duration</label><input type="text" id="q_days_val" readonly style="background:#eee;"></div>
         </div>
 
         <div class="section-head"><i class="fa-solid fa-road"></i> 3. Mileage & Insurance</div>
         <div class="responsive-grid">
             <div><label>Extra KM Package</label>
-                <select id="q_km_type" onchange="updateCalc()">
+                <select id="q_km_type" onchange="runCalculations()">
                     <option value="Standard" data-km="0">Standard (120 KM/Day)</option>
-                    <option value="500 KM Extra" data-km="500">500 KM</option>
-                    <option value="750 KM Extra" data-km="750">750 KM</option>
-                    <option value="1000 KM Extra" data-km="1000">1000 KM</option>
-                    <option value="1500 KM Extra" data-km="1500">1500 KM</option>
-                    <option value="2000 KM Extra" data-km="2000">2000 KM</option>
-                    <option value="3000 KM Extra" data-km="3000">3000 KM</option>
+                    <option value="500 KM Extra" data-km="500">500 KM Extra</option>
+                    <option value="750 KM Extra" data-km="750">750 KM Extra</option>
+                    <option value="1000 KM Extra" data-km="1000">1000 KM Extra</option>
+                    <option value="1500 KM Extra" data-km="1500">1500 KM Extra</option>
+                    <option value="2000 KM Extra" data-km="2000">2000 KM Extra</option>
+                    <option value="3000 KM Extra" data-km="3000">3000 KM Extra</option>
                     <option value="Unlimited" data-km="999999">Unlimited KM</option>
                 </select>
             </div>
-            <div><label>KM Package Cost</label><input type="number" id="q_km_cost" value="0" oninput="updateCalc()"></div>
+            <div><label>KM Package Cost</label><input type="number" id="q_km_cost" value="0" oninput="runCalculations()"></div>
             <div><label>Insurance Plan</label>
-                <select id="q_ins_pack" onchange="updateCalc()">
+                <select id="q_ins_pack" onchange="runCalculations()">
                     <option value="Basic">Basic (100% Liability)</option>
                     <option value="Intermediate">Intermediate (70/30)</option>
                     <option value="Full">Full Protection (Zero Liability)</option>
                 </select>
             </div>
-            <div><label>Insurance / Day</label><input type="number" id="q_ins_rate" value="0" oninput="updateCalc()"></div>
+            <div><label>Insurance / Day</label><input type="number" id="q_ins_rate" value="0" oninput="runCalculations()"></div>
         </div>
 
         <div class="section-head"><i class="fa-solid fa-plus-circle"></i> 4. Extras & Delivery</div>
         <div class="responsive-grid">
-            <div><label>Pick-up / Drop-off Fee</label><input type="number" id="q_del" value="0" oninput="updateCalc()"></div>
+            <div><label>Pick-up / Drop-off Fee</label><input type="number" id="q_del" value="0" oninput="runCalculations()"></div>
             <div><label>Security Deposit</label><input type="number" id="q_dep" value="5000"></div>
-            <div class="chk-group"><input type="checkbox" id="chk_seat" onchange="updateCalc()"> <label style="margin:0;">Child Car Seat (+250/day)</label></div>
-            <div class="chk-group"><input type="checkbox" id="chk_driver" onchange="updateCalc()"> <label style="margin:0;">Additional Driver (+150/day)</label></div>
+            <div class="chk-row"><input type="checkbox" id="chk_seat" onchange="runCalculations()"> <label style="margin:0;">Child Seat (+250/day)</label></div>
+            <div class="chk-row"><input type="checkbox" id="chk_driver" onchange="runCalculations()"> <label style="margin:0;">Add. Driver (+150/day)</label></div>
         </div>
 
-        <button class="btn-gen" onclick="generateProposal()">Generate Official Proposal</button>
+        <button class="btn-gen" onclick="triggerProposal()">Generate Official Proposal</button>
     </div>
 
     <div id="quotationOutput">
         <div class="a4-quote">
             <div class="q-header">
-                <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:50px;">
+                <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:45px;">
                 <div style="text-align: right;">
-                    <h2 style="margin: 0; color: var(--primary); font-size: 18pt;">PRICE PROPOSAL</h2>
-                    <p style="margin: 0; font-weight: bold; font-size: 11pt;">Ref: <span id="out_ref"></span> | Date: <span id="out_date"></span></p>
+                    <h2 style="margin: 0; color: var(--primary); font-size: 16pt;">PRICE PROPOSAL</h2>
+                    <p style="margin: 0; font-weight: bold; font-size: 10pt;">Ref: <span id="out_ref"></span> | Date: <span id="out_date"></span></p>
                 </div>
             </div>
 
             <div class="box-section"><span class="bs-title">CLIENT & PERIOD</span>
                 <table style="margin:0;">
-                    <tr><th width="15%">Client Name</th><td id="out_name" colspan="3"></td></tr>
-                    <tr><th width="15%">Pickup</th><td id="out_start" width="35%"></td><th width="15%">Dropoff</th><td id="out_end" width="35%"></td></tr>
+                    <tr><th width="18%">Client Name</th><td id="out_name" colspan="3"></td></tr>
+                    <tr><th width="18%">Pickup</th><td id="out_start" width="32%"></td><th width="18%">Dropoff</th><td id="out_end" width="32%"></td></tr>
                     <tr><th>Pickup Loc</th><td id="out_p_loc"></td><th>Dropoff Loc</th><td id="out_d_loc"></td></tr>
                     <tr><th>Duration</th><td id="out_dur"></td><th>KM Allowance</th><td id="out_km_desc"></td></tr>
                 </table>
             </div>
 
             <div class="box-section"><span class="bs-title">VEHICLE DETAILS</span>
-                <table><tr><th width="15%">Model</th><td id="out_car" colspan="3"></td></tr></table>
+                <table><tr><th width="18%">Model</th><td id="out_car" colspan="3"></td></tr></table>
             </div>
 
             <div class="box-section"><span class="bs-title">FINANCIAL BREAKDOWN</span>
@@ -159,80 +159,87 @@
             </div>
 
             <div class="box-section"><span class="bs-title">INSURANCE & LIABILITY: <span id="out_ins_title"></span></span>
-                <p id="out_ins_body" style="margin:0; font-size:9pt; line-height:1.4;"></p>
+                <p id="out_ins_body" style="margin:0; font-size:8.5pt; line-height:1.35;"></p>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                <div style="font-weight:bold; border-bottom:1.5px solid #ddd; font-size:10pt; color:var(--primary); flex-grow: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;">
+                <div style="font-weight:bold; border-bottom:1.5px solid #ddd; font-size:9.5pt; color:var(--primary); flex-grow: 1;">
                     RENTAL TERMS & CONDITIONS Summary<br>
-                    <a href="https://brothersegy.com/terms-conditions/" target="_blank" style="color: #04509D; font-size: 8.5pt; text-decoration: underline; position: relative; z-index: 99;">View Full Detailed Terms & FAQ Online (Link)</a>
+                    <a href="https://brothersegy.com/terms-conditions/" target="_blank" style="color: #04509D; font-size: 8.5pt; text-decoration: underline;">View Full Detailed Terms & FAQ Online (Clickable)</a>
                 </div>
-                <div style="text-align: right; margin-left: 20px;">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://brothersegy.com/terms-conditions/&size=64x64" style="height:55px;">
-                    <div style="font-size: 6pt; font-weight: bold;">SCAN FOR FAQ</div>
+                <div style="text-align: right; margin-left: 15px;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://brothersegy.com/terms-conditions/&size=64x64" style="height:48px;">
+                    <div style="font-size: 6.5pt; font-weight: bold;">SCAN FOR FAQ</div>
                 </div>
             </div>
             
             <div class="terms-grid">
-                [span_5](start_span)<div><strong>1. ELIGIBILITY:</strong> Min age 21. Valid License and ID/Passport mandatory. Authorized drivers only[span_5](end_span).</div>
-                <div><strong>2. RENTAL CYCLE:</strong> Based on 24-hour units. Every hour is charged from the 1st hour. [span_6](start_span)If the period is exceeded by 5 hours, a full additional day is charged[span_6](end_span).</div>
-                <div><strong>3. MILEAGE:</strong> 120 KM/day included. Summed with purchased packages. [span_7](start_span)Excess KM charged per return rates[span_7](end_span).</div>
-                <div><strong>4. FUEL:</strong> "Same to Same" policy. [span_8](start_span)Return with the same level as pickup to avoid shortage charges[span_8](end_span).</div>
-                <div><strong>5. [span_9](start_span)INSURANCE VOID:</strong> Plan is null if no official Police Report is provided immediately following an accident[span_9](end_span).</div>
-                <div><strong>6. PENALTIES:</strong> Key loss ($400), License loss ($250), Tire damage ($200). [span_10](start_span)Dirty return (350 EGP)[span_10](end_span).</div>
-                <div><strong>7. DEPOSIT:</strong> Refunded upon safe return in same currency mix. [span_11](start_span)Card refunds processed as EGP Cash[span_11](end_span).</div>
-                <div><strong>8. [span_12](start_span)LIABILITY:</strong> Lessee bears full legal and criminal liability for the vehicle during the rental period[span_12](end_span).</div>
+                [span_2](start_span)<div><strong>1. ELIGIBILITY:</strong> Min age 21. Valid License and ID/Passport mandatory[span_2](end_span). [span_3](start_span)Authorized drivers only[span_3](end_span).</div>
+                <div><strong>2. [span_4](start_span)RENTAL CYCLE:</strong> Charges based on 24-hour units[span_4](end_span). [span_5](start_span)Every hour is charged from the 1st hour[span_5](end_span). [span_6](start_span)If the period is exceeded by 5 hours, a full additional day is charged[span_6](end_span).</div>
+                <div><strong>3. [span_7](start_span)MILEAGE:</strong> 120 KM/day included[span_7](end_span). [span_8](start_span)Summed with purchased extra packages[span_8](end_span). [span_9](start_span)Excess KM charged per return rates[span_9](end_span).</div>
+                <div><strong>4. [span_10](start_span)FUEL:</strong> "Same to Same" policy[span_10](end_span). [span_11](start_span)Return with the same level as pickup to avoid shortage charges[span_11](end_span).</div>
+                <div><strong>5. [span_12](start_span)INSURANCE VOID:</strong> Plan is null if no official Police Report is provided immediately following an accident[span_12](end_span).</div>
+                <div><strong>6. [span_13](start_span)PENALTIES:</strong> Key loss ($400), License loss ($250), Tire damage ($200)[span_13](end_span). [span_14](start_span)Dirty return (350 EGP)[span_14](end_span).</div>
+                <div><strong>7. [span_15](start_span)DEPOSIT:</strong> Refunded upon safe return in same currency mix[span_15](end_span). [span_16](start_span)Card refunds processed as EGP Cash[span_16](end_span).</div>
+                <div><strong>8. [span_17](start_span)LIABILITY:</strong> Lessee bears full legal and criminal liability for the vehicle during the rental period[span_17](end_span).</div>
             </div>
 
-            <div class="footer-note">Best Regards, Brothers EGY Team</div>
+            [span_18](start_span)<div class="footer-note">Best Regards, Brothers EGY Team[span_18](end_span)</div>
 
-            <div style="text-align:center; margin-top:15px;" class="btn-print-action">
+            <div style="text-align:center; margin-top:10px;" class="btn-print-action">
                 <button class="btn-gen" style="width: 220px;" onclick="window.print()">Print / Save PDF</button>
             </div>
         </div>
     </div>
 
     <script>
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleString('en-GB');
+        // --- 1. CORE FUNCTIONS ---
+        function runCalculations() {
+            const startStr = document.getElementById('q_start').value;
+            const endStr = document.getElementById('q_end').value;
+            if (startStr && endStr) {
+                const s = new Date(startStr); const e = new Date(endStr);
+                if (e > s) {
+                    const diff = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
+                    document.getElementById('q_days_val').value = diff + " Days";
+                    return diff;
+                }
+            }
+            return 0;
         }
-        setInterval(updateClock, 1000);
-        updateClock();
 
-        function updateCarRate() {
+        function updateFleetRate() {
             const sel = document.getElementById('q_car');
             document.getElementById('q_rate').value = sel.options[sel.selectedIndex].getAttribute('data-rate');
-            updateCalc();
+            runCalculations();
         }
 
-        function updateCalc() {
-            const s = new Date(document.getElementById('q_start').value);
-            const e = new Date(document.getElementById('q_end').value);
-            if (e > s) {
-                const diff = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
-                document.getElementById('q_days_val').value = diff + " Days";
-            }
+        // --- 2. LIVE CLOCK FIX ---
+        function startLiveClock() {
+            const clockEl = document.getElementById('clock');
+            setInterval(() => {
+                const now = new Date();
+                clockEl.innerText = now.toLocaleString('en-GB');
+            }, 1000);
         }
 
-        function generateProposal() {
+        // --- 3. GENERATION LOGIC ---
+        function triggerProposal() {
+            const days = runCalculations();
+            if (days === 0) { alert("Please select Pickup and Dropoff dates first."); return; }
+
             const name = document.getElementById('q_name').value || 'Valued Client';
-            const sVal = document.getElementById('q_start').value;
-            const eVal = document.getElementById('q_end').value;
-            if(!sVal || !eVal) { alert("Please select Pickup and Dropoff dates."); return; }
-
-            const s = new Date(sVal); const e = new Date(eVal);
-            const days = Math.ceil((e - s) / (1000 * 60 * 60 * 24)) || 1;
             const ref = "PR-" + Math.floor(10000 + Math.random()*89999);
             const dateStr = new Date().toLocaleDateString('en-GB');
 
+            // Filename fix for PDF
             document.getElementById('page-title').innerText = `${ref}_${name.replace(/\s+/g, '_')}_${dateStr.replace(/\//g,'-')}`;
 
+            // Financial Calculations
             const rate = parseFloat(document.getElementById('q_rate').value) || 0;
             const insRate = parseFloat(document.getElementById('q_ins_rate').value) || 0;
             const kmCost = parseFloat(document.getElementById('q_km_cost').value) || 0;
             const del = parseFloat(document.getElementById('q_del').value) || 0;
-            
             const seatFee = document.getElementById('chk_seat').checked ? 250 * days : 0;
             const driverFee = document.getElementById('chk_driver').checked ? 150 * days : 0;
 
@@ -240,15 +247,17 @@
             const totalIns = insRate * days;
             const grandTotal = totalBase + totalIns + kmCost + del + seatFee + driverFee;
 
+            // KM Calculation Logic
             const kmSel = document.getElementById('q_km_type');
             const pkgKM = parseInt(kmSel.options[kmSel.selectedIndex].getAttribute('data-km'));
             const totalKM = pkgKM >= 999999 ? "Unlimited" : (days * 120 + pkgKM).toLocaleString() + " KM Total";
 
+            // Map UI Output
             document.getElementById('out_ref').innerText = ref;
             document.getElementById('out_date').innerText = dateStr;
             document.getElementById('out_name').innerText = name;
-            document.getElementById('out_start').innerText = s.toLocaleString('en-GB');
-            document.getElementById('out_end').innerText = e.toLocaleString('en-GB');
+            document.getElementById('out_start').innerText = new Date(document.getElementById('q_start').value).toLocaleString('en-GB');
+            document.getElementById('out_end').innerText = new Date(document.getElementById('q_end').value).toLocaleString('en-GB');
             document.getElementById('out_p_loc').innerText = document.getElementById('q_p_loc').value || 'Office';
             document.getElementById('out_d_loc').innerText = document.getElementById('q_d_loc').value || 'Office';
             document.getElementById('out_dur').innerText = days + " Days";
@@ -257,27 +266,34 @@
             document.getElementById('out_total').innerText = grandTotal.toLocaleString() + " EGP";
             document.getElementById('out_dep_val').innerText = (parseFloat(document.getElementById('q_dep').value) || 0).toLocaleString() + " EGP";
 
-            let table = `<tr><td>Base Rental</td><td>${rate.toLocaleString()} x ${days} Days</td><td align="right">${totalBase.toLocaleString()}</td></tr>`;
+            // Table Build
+            let table = `<tr><td>Base Rental Fee</td><td>${rate.toLocaleString()} x ${days} Days</td><td align="right">${totalBase.toLocaleString()}</td></tr>`;
             if(totalIns > 0) table += `<tr><td>Insurance Plan</td><td>${insRate.toLocaleString()} x ${days} Days</td><td align="right">${totalIns.toLocaleString()}</td></tr>`;
             if(kmCost > 0) table += `<tr><td>KM Package (${kmSel.value})</td><td>Flat Fee</td><td align="right">${kmCost.toLocaleString()}</td></tr>`;
-            if(seatFee > 0) table += `<tr><td>Child Car Seat</td><td>250 x ${days} Days</td><td align="right">${seatFee.toLocaleString()}</td></tr>`;
-            if(driverFee > 0) table += `<tr><td>Additional Driver</td><td>150 x ${days} Days</td><td align="right">${driverFee.toLocaleString()}</td></tr>`;
+            if(seatFee > 0) table += `<tr><td>Child Car Seat</td><td>Checkbox Extra</td><td align="right">${seatFee.toLocaleString()}</td></tr>`;
+            if(driverFee > 0) table += `<tr><td>Additional Driver</td><td>Checkbox Extra</td><td align="right">${driverFee.toLocaleString()}</td></tr>`;
             if(del > 0) table += `<tr><td>Pick-up / Drop-off Fee</td><td>Fixed</td><td align="right">${del.toLocaleString()}</td></tr>`;
             
             document.getElementById('out_table').innerHTML = table;
             document.getElementById('out_ins_title').innerText = document.getElementById('q_ins_pack').value.toUpperCase();
             
             const insTexts = {
-                [span_13](start_span)"Basic": "Basic CDW (100% Liability): High Deductible. Client pays 100% for Glass, Tires, and Undercarriage damages. Bodywork excess applies[span_13](end_span).",
-                "Intermediate": "Reduced Liability (70/30): Client pays 70% of costs, Company covers 30% of bodywork. [span_14](start_span)Excludes glass and tires[span_14](end_span).",
-                [span_15](start_span)"Full": "Zero Deductible Waiver: Reduces liability to ZERO for covered body, glass, and undercarriage items within standard plan caps[span_15](end_span)."
+                [span_19](start_span)"Basic": "Basic CDW (100% Liability)[span_19](end_span)[span_20](start_span): Client pays 100% for Glass, Tires, and Undercarriage damages[span_20](end_span). [span_21](start_span)Bodywork excess applies[span_21](end_span).",
+                [span_22](start_span)"Intermediate": "Reduced Liability (70/30)[span_22](end_span)[span_23](start_span): Client pays 70% of costs, Company covers 30% of bodywork[span_23](end_span). [span_24](start_span)Excludes glass and tires[span_24](end_span).",
+                [span_25](start_span)"Full": "Zero Deductible Waiver[span_25](end_span)[span_26](start_span): Reduces liability to ZERO for covered body, glass, and undercarriage items within standard caps[span_26](end_span)."
             };
             document.getElementById('out_ins_body').innerText = insTexts[document.getElementById('q_ins_pack').value];
             
+            // Show result
             document.getElementById('quotationOutput').style.display = 'block';
             document.getElementById('quotationOutput').scrollIntoView({ behavior: 'smooth' });
         }
-        window.onload = updateCarRate;
+
+        // Start initialization
+        window.onload = function() {
+            startLiveClock();
+            updateFleetRate();
+        };
     </script>
 </body>
 </html>
