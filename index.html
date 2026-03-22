@@ -1,397 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Brothers EGY - Smart Contract System</title>
+    <title id="page-title">Brothers EGY - Professional Proposal System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ================= SCREEN UI ================= */
-        :root {
-            --primary: #04509D;
-            --secondary: #2c3e50;
-            --accent: #e67e22;
-            --bg: #f0f3f6;
+        :root { --primary: #04509D; --secondary: #2c3e50; --accent: #e67e22; --bg: #f0f3f6; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 10px; color: #333; }
+
+        /* Setup Interface Container */
+        .floating-header { max-width: 1000px; margin: 10px auto; background: white; border: 3px solid var(--primary); border-radius: 50px; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+        .live-clock { font-family: monospace; font-weight: bold; font-size: 14px; color: var(--primary); }
+        
+        .setup-container { max-width: 1000px; margin: 20px auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); box-sizing: border-box; }
+        
+        .section-head { font-size: 14px; font-weight: 800; color: var(--secondary); text-transform: uppercase; margin: 25px 0 10px 0; border-bottom: 2px solid #eee; display: flex; align-items: center; gap: 8px; }
+        
+        /* THE AUTO-FIT GRID LOGIC */
+        .responsive-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 15px; 
+            margin-bottom: 15px; 
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background: var(--bg);
-            margin: 0;
-            padding: 10px 20px;
-            color: #333;
-        }
+        label { display: block; font-size: 10px; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 4px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 14px; background: #fff; }
+        
+        .chk-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 5px; background: #f9f9f9; border-radius: 6px; }
+        .chk-row input { width: 20px; height: 20px; cursor: pointer; }
+        
+        .btn-gen { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; font-size: 16px; transition: 0.3s; }
+        .btn-gen:hover { background: #033a75; }
 
-        /* FLOATING PILL HEADER */
-        .floating-header {
-            max-width: 1050px;
-            margin: 10px auto 20px auto;
-            background: white;
-            border: 3px solid var(--primary);
-            border-radius: 50px;
-            padding: 10px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-        }
-
-        .rate-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-        }
-
-        .badge-live {
-            background: #27ae60;
-            color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 8px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .live-clock {
-            font-family: monospace;
-            font-weight: bold;
-            font-size: 13px;
-            color: var(--primary);
-        }
-
-        .rate-input {
-            width: 70px !important;
-            font-weight: bold;
-            color: #000;
-            text-align: center;
-            border: 1px solid #ccc !important;
-            height: 26px !important;
-            border-radius: 4px;
-            font-size: 12px !important;
-        }
-
-        /* MAIN CONTROL PANEL */
-        .control-panel {
-            max-width: 1050px;
-            margin: 0 auto 40px auto;
-            background: transparent;
-        }
-
-        .cp-body {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-        }
-
-        .section-head {
-            font-size: 14px;
-            font-weight: 800;
-            color: var(--secondary);
-            text-transform: uppercase;
-            margin: 25px 0 10px 0;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #eee;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-head:first-child {
-            margin-top: 0;
-        }
-
-        label {
-            display: block;
-            font-size: 10px;
-            font-weight: 700;
-            color: #555;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-        }
-
-        input,
-        select {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 0 12px;
-            height: 40px;
-            font-size: 13px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            transition: 0.2s;
-        }
-
-        select {
-            cursor: pointer;
-        }
-
-        input:focus,
-        select:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(4, 80, 157, 0.1);
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 12px;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 12px;
-        }
-
-        .grid-4 {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 12px;
-        }
-
-        .phone-group {
-            display: flex;
-            gap: 5px;
-        }
-
-        .phone-group input:first-child {
-            width: 70px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .phone-group input:last-child {
-            flex: 1;
-        }
-
-        /* MONEY & BALANCES */
-        .balance-box {
-            background: #2c3e50;
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-            box-sizing: border-box;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-        }
-
-        .bal-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 6px;
-            font-size: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 3px;
-        }
-
-        .btn-gen {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 18px;
-            width: 100%;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            transition: 0.3s;
-            text-transform: uppercase;
-        }
-
-        .btn-gen:hover {
-            background: #033a75;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-final-print {
-            background: var(--success);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            text-transform: uppercase;
-            margin: 0 auto 20px auto;
-            display: none;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 1050px;
-        }
-
-        .btn-final-print:hover {
-            background: #219653;
-            transform: scale(1.01);
-        }
-
-        .ins-basic {
-            background-color: #ffebee !important;
-            border: 2px solid #c0392b !important;
-            color: #c0392b !important;
-        }
-
-        .ins-inter {
-            background-color: #fff3e0 !important;
-            border: 2px solid #e67e22 !important;
-            color: #e67e22 !important;
-        }
-
-        .ins-full {
-            background-color: #e8f5e9 !important;
-            border: 2px solid #27ae60 !important;
-            color: #27ae60 !important;
-        }
-
-        /* ================= A4 PAGE PREVIEW & PRINT STYLES ================= */
-        #quotationOutput {
-            display: none;
-            margin-top: 20px;
-        }
-
-        .a4-quote {
-            width: 210mm;
-            height: 296mm;
-            padding: 10mm 15mm;
-            margin: 0 auto 30px auto;
-            background: white;
-            position: relative;
-            box-sizing: border-box;
-            overflow: hidden;
-            font-family: 'Helvetica', 'Arial', sans-serif;
-            font-size: 9.5pt;
-            line-height: 1.35;
-            color: #000;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-            page-break-after: always;
-        }
-
-        .q-header {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 2px solid var(--primary);
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            align-items: center;
-        }
-
-        .box-section {
-            border: 1px solid #000;
-            padding: 8px;
-            margin-bottom: 10px;
-            position: relative;
-            border-radius: 4px;
-        }
-
-        .bs-title {
-            background: #000;
-            color: white;
-            padding: 1px 8px;
-            font-weight: bold;
-            font-size: 9pt;
-            position: absolute;
-            top: -10px;
-            left: 8px;
-            text-transform: uppercase;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 5px 0;
-            font-size: 8.5pt;
-        }
-
-        th,
-        td {
-            border: 1px solid #000;
-            padding: 4px;
-            text-align: left;
-        }
-
-        th {
-            background: #f0f0f0;
-            font-weight: bold;
-        }
-
-        .terms-grid {
-            font-size: 7.1pt;
-            column-count: 2;
-            column-gap: 20px;
-            text-align: justify;
-            color: #000;
-            border-top: 1px solid #eee;
-            padding-top: 8px;
-            line-height: 1.25;
-        }
-
-        .footer-note {
-            text-align: center;
-            font-weight: bold;
-            font-size: 9.5pt;
-            color: var(--primary);
-            margin-top: auto;
-            padding-top: 8px;
-            border-top: 1.5px solid var(--primary);
+        /* Proposal Output Fix */
+        #quotationOutput { display: none; margin: 20px auto; width: 100%; max-width: 210mm; }
+        .a4-quote { width: 210mm; height: 296mm; padding: 10mm 15mm; background: white; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; position: relative; overflow: hidden; font-size: 9.5pt; }
+        
+        /* Mobile View Tweaks */
+        @media screen and (max-width: 600px) {
+            .floating-header { flex-direction: column; border-radius: 20px; text-align: center; gap: 10px; }
+            .setup-container { padding: 15px; }
+            .responsive-grid { grid-template-columns: 1fr; }
+            #quotationOutput { overflow-x: auto; } /* Allow scrolling for PDF preview on tiny phones */
         }
 
         @media print {
-            body {
-                padding: 0;
-                margin: 0;
-                background: white;
-                -webkit-print-color-adjust: exact;
-            }
-
-            .floating-header,
-            .setup-container,
-            .btn-print-action {
-                display: none !important;
-            }
-
-            #quotationOutput {
-                display: block !important;
-                margin: 0;
-                padding: 0;
-                width: 100%;
-            }
-
-            .a4-quote {
-                box-shadow: none;
-                border: none;
-                width: 210mm;
-                height: 296mm;
-                margin: 0;
-                padding: 8mm 12mm;
-            }
-
-            @page {
-                size: A4;
-                margin: 0;
-            }
+            body { padding: 0; margin: 0; background: white; }
+            .floating-header, .setup-container, .btn-print-action { display: none !important; }
+            #quotationOutput { display: block !important; margin: 0; padding: 0; width: 100%; }
+            .a4-quote { box-shadow: none; border: none; width: 210mm; height: 296mm; margin: 0; padding: 10mm 15mm; }
+            @page { size: A4; margin: 0; }
         }
+
+        /* Inner Table Styles */
+        .box-section { border: 1px solid #000; padding: 8px; margin-bottom: 10px; position: relative; border-radius: 4px; }
+        .bs-title { background: #000; color: white; padding: 1px 8px; font-weight: bold; font-size: 9pt; position: absolute; top: -10px; left: 8px; text-transform: uppercase; }
+        table { width: 100%; border-collapse: collapse; margin: 5px 0; }
+        th, td { border: 1px solid #000; padding: 5px; text-align: left; }
+        th { background: #f0f0f0; font-weight: bold; }
+        .terms-grid { font-size: 7.2pt; column-count: 2; column-gap: 20px; text-align: justify; line-height: 1.25; }
+        .footer-note { text-align: center; font-weight: bold; font-size: 9.5pt; color: var(--primary); margin-top: auto; padding-top: 10px; border-top: 1.5px solid var(--primary); }
     </style>
 </head>
-
 <body>
 
     <div class="floating-header">
@@ -423,7 +95,7 @@
             <div><label>Select From Fleet</label>
                 <select id="q_car" onchange="updateRateFromFleet()">
                     <option value="48" data-rate="2800">Jetour X90 Plus</option>
-                    <option value="47" data-rate="2200">Hyundai Tucson</option>
+                    <option value="47" data-rate="2600">Hyundai Tucson</option>
                     <option value="33" data-rate="2100">Haval Jolion</option>
                     <option value="43" data-rate="1700">Renault Duster</option>
                     <option value="34" data-rate="1800">MG ZS</option>
@@ -442,11 +114,7 @@
                 <select id="q_km_type" onchange="runTotalCalc()">
                     <option value="Standard" data-km="0">Standard (120 KM/Day)</option>
                     <option value="500 KM Extra" data-km="500">500 KM Package</option>
-                    <option value="750 KM Extra" data-km="750">750 KM Package</option>
                     <option value="1000 KM Extra" data-km="1000">1000 KM Package</option>
-                    <option value="1500 KM Extra" data-km="1500">1500 KM Package</option>
-                    <option value="2000 KM Extra" data-km="2000">2000 KM Package</option>
-                    <option value="3000 KM Extra" data-km="3000">3000 KM Package</option>
                     <option value="Unlimited" data-km="999999">Unlimited KM</option>
                 </select>
             </div>
@@ -458,15 +126,16 @@
                     <option value="Full Protection">Full Protection (Zero Liability)</option>
                 </select>
             </div>
-            <div><label>Insurance Cost / Day</label><input type="number" id="q_ins_rate" value="0" oninput="runTotalCalc()"></div>
         </div>
 
         <div class="section-head"><i class="fa-solid fa-plus-circle"></i> 4. Extras & Delivery</div>
         <div class="responsive-grid">
             <div><label>Pick-up / Drop-off Fee</label><input type="number" id="q_del" value="0" oninput="runTotalCalc()"></div>
             <div><label>Security Deposit</label><input type="number" id="q_dep" value="5000"></div>
-            <div class="chk-row"><input type="checkbox" id="chk_seat" onchange="runTotalCalc()"> <label style="margin:0;">Child Seat (+250/day)</label></div>
-            <div class="chk-row"><input type="checkbox" id="chk_driver" onchange="runTotalCalc()"> <label style="margin:0;">Add. Driver (+500/day)</label></div>
+            <div style="display:flex; flex-direction:column; gap:5px;">
+                <div class="chk-row"><input type="checkbox" id="chk_seat" onchange="runTotalCalc()"> <label style="margin:0;">Child Seat (+250/day)</label></div>
+                <div class="chk-row"><input type="checkbox" id="chk_driver" onchange="runTotalCalc()"> <label style="margin:0;">Add. Driver (+500/day)</label></div>
+            </div>
         </div>
 
         <button class="btn-gen" onclick="executeGeneration()">Generate Official Proposal</button>
@@ -483,7 +152,7 @@
             </div>
 
             <div class="box-section"><span class="bs-title">CLIENT & PERIOD</span>
-                <table style="margin:0;">
+                <table>
                     <tr><th width="15%">Client Name</th><td id="out_name" colspan="3"></td></tr>
                     <tr><th>Phone</th><td id="out_phone"></td><th>Email</th><td id="out_email"></td></tr>
                     <tr><th width="15%">Pickup</th><td id="out_start" width="35%"></td><th width="15%">Dropoff</th><td id="out_end" width="35%"></td></tr>
@@ -528,7 +197,7 @@
                 <div><strong>3. MILEAGE:</strong> 120 KM/day included. Summed with extra packages. Excess KM charged per return rates.</div>
                 <div><strong>4. FUEL:</strong> "Same to Same" policy. Return with the same level as pickup to avoid charges.</div>
                 <div><strong>5. INSURANCE VOID:</strong> Plan is null if no official Police Report is provided immediately following an accident.</div>
-                <div><strong>6. DEPOSIT:</strong> Refunded upon safe return in same currency mix. Card refunds processed as EGP Cash.</div>
+                <div><strong>6. DEPOSIT:</strong> Refunded upon safe return. Card refunds processed as EGP Cash.</div>
                 <div><strong>7. LIABILITY:</strong> Lessee bears full legal and criminal liability for the vehicle during the rental period.</div>
             </div>
 
@@ -541,7 +210,6 @@
     </div>
 
     <script>
-        // Clock Persistence Fix
         function startClock() {
             setInterval(() => {
                 document.getElementById('clock').innerText = new Date().toLocaleString('en-GB');
@@ -556,9 +224,9 @@
 
         function runTotalCalc() {
             const sStr = document.getElementById('q_start').value;
-            const endStr = document.getElementById('q_end').value;
-            if (sStr && endStr) {
-                const s = new Date(sStr); const e = new Date(endStr);
+            const eStr = document.getElementById('q_end').value;
+            if (sStr && eStr) {
+                const s = new Date(sStr); const e = new Date(eStr);
                 if (e > s) {
                     const diff = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
                     document.getElementById('q_days_val').value = diff + " Days";
@@ -577,26 +245,24 @@
             const email = document.getElementById('q_email').value || '-';
             
             const ref = "PR-" + Math.floor(Math.random()*90000);
-            const dateStr = new Date().toLocaleDateString('en-GB');
-            document.getElementById('page-title').innerText = `${ref}_${name.replace(/\s+/g, '_')}_${dateStr.replace(/\//g,'-')}`;
+            const today = new Date().toLocaleDateString('en-GB');
+            document.getElementById('page-title').innerText = `${ref}_${name.replace(/\s+/g, '_')}_${today.replace(/\//g,'-')}`;
 
             const rate = parseFloat(document.getElementById('q_rate').value) || 0;
-            const insRate = parseFloat(document.getElementById('q_ins_rate').value) || 0;
             const kmCost = parseFloat(document.getElementById('q_km_cost').value) || 0;
             const del = parseFloat(document.getElementById('q_del').value) || 0;
             const seatFee = document.getElementById('chk_seat').checked ? 250 * days : 0;
             const driverFee = document.getElementById('chk_driver').checked ? 500 * days : 0;
 
             const totalBase = rate * days;
-            const totalIns = insRate * days;
-            const grandTotal = totalBase + totalIns + kmCost + del + seatFee + driverFee;
+            const grandTotal = totalBase + kmCost + del + seatFee + driverFee;
 
             const kmSel = document.getElementById('q_km_type');
             const pkgKM = parseInt(kmSel.options[kmSel.selectedIndex].getAttribute('data-km'));
             const totalKM = pkgKM >= 999999 ? "Unlimited" : (days * 120 + pkgKM).toLocaleString() + " KM Total";
 
             document.getElementById('out_ref').innerText = ref;
-            document.getElementById('out_date').innerText = dateStr;
+            document.getElementById('out_date').innerText = today;
             document.getElementById('out_name').innerText = name;
             document.getElementById('out_phone').innerText = phone;
             document.getElementById('out_email').innerText = email;
@@ -612,8 +278,7 @@
             document.getElementById('out_dep_val').innerText = (parseFloat(document.getElementById('q_dep').value) || 0).toLocaleString() + " EGP";
 
             let table = `<tr><td>Base Rental</td><td>${rate.toLocaleString()} x ${days} Days</td><td align="right">${totalBase.toLocaleString()}</td></tr>`;
-            if(totalIns > 0) table += `<tr><td>Insurance Plan</td><td>${insRate.toLocaleString()} x ${days} Days</td><td align="right">${totalIns.toLocaleString()}</td></tr>`;
-            if(kmCost > 0) table += `<tr><td>KM Package</td><td>Flat Fee</td><td align="right">${kmCost.toLocaleString()}</td></tr>`;
+            if(kmCost > 0) table += `<tr><td>KM Package (${kmSel.options[kmSel.selectedIndex].text})</td><td>Flat Fee</td><td align="right">${kmCost.toLocaleString()}</td></tr>`;
             if(seatFee > 0) table += `<tr><td>Child Car Seat</td><td>Daily Fee</td><td align="right">${seatFee.toLocaleString()}</td></tr>`;
             if(driverFee > 0) table += `<tr><td>Additional Driver</td><td>Daily Fee</td><td align="right">${driverFee.toLocaleString()}</td></tr>`;
             if(del > 0) table += `<tr><td>Pick-up / Drop-off Fee</td><td>Fixed</td><td align="right">${del.toLocaleString()}</td></tr>`;
@@ -622,18 +287,16 @@
             document.getElementById('out_ins_title').innerText = document.getElementById('q_ins_pack').value.toUpperCase();
             
             const insTexts = {
-                "Basic": "Basic CDW (100% Liability): High Deductible. Client pays 100% for Glass, Tires, and Undercarriage damages. Bodywork excess applies.",
-                "Intermediate": "Reduced Liability (70/30): Client pays 70% of costs, Company covers 30% of bodywork. Excludes glass and tires.",
-                "Full Protection": "Zero Deductible Waiver: Reduces liability to ZERO for covered body, glass, and undercarriage items within standard plan caps."
+                "BASIC": "Basic CDW (100% Liability): Client pays 100% for Glass, Tires, and Undercarriage damages.",
+                "INTERMEDIATE": "Reduced Liability (70/30): Client pays 70% of costs, Company covers 30% of bodywork.",
+                "FULL PROTECTION": "Zero Deductible Waiver: Reduces liability to ZERO for covered body, glass, and undercarriage items."
             };
-            document.getElementById('out_ins_body').innerText = insTexts[document.getElementById('q_ins_pack').value];
+            document.getElementById('out_ins_body').innerText = insTexts[document.getElementById('q_ins_pack').value.toUpperCase()];
             
             document.getElementById('quotationOutput').style.display = 'block';
-            document.getElementById('quotationOutput').scrollIntoView({ behavior: 'smooth' });
         }
 
         window.onload = function() { startClock(); updateRateFromFleet(); };
     </script>
 </body>
-
 </html>
